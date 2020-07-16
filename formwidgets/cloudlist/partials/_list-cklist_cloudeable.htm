@@ -1,0 +1,59 @@
+<?php
+    $checkedValues = null;
+    $isScrollable = count($cloudeables) > 15;
+    $quickselectEnabled = true;
+?>
+<!-- Checkbox List -->
+
+<div class="field-checkboxlist <?= $isScrollable ? 'is-scrollable' : '' ?>">
+    <?php if ($quickselectEnabled): ?>
+    <!-- Quick selection -->
+    <div class="checkboxlist-controls">
+        <div>
+            <a href="javascript:;" data-field-checkboxlist-all>
+                <i class="icon-check-square"></i> <?= e(trans('backend::lang.form.select_all')) ?>
+            </a>
+        </div>
+        <div>
+            <a href="javascript:;" data-field-checkboxlist-none>
+                <i class="icon-eraser"></i> <?= e(trans('backend::lang.form.select_none')) ?>
+            </a>
+        </div>
+    </div>
+    <?php endif ?>
+
+    <div class="field-checkboxlist-inner">
+
+        <?php if ($isScrollable): ?>
+        <!-- Scrollable Checkbox list -->
+        <div class="field-checkboxlist-scrollable">
+            <div class="control-scrollbar" data-control="scrollbar">
+                <?php endif ?>
+
+                <input type="hidden" name="<?= $name ?>" value="0" />
+
+                <?php $index = 0; foreach($cloudeables as $key=>$cloudeable): ?>
+                <?php
+                    $index++;
+                    $checkboxId = 'checkbox_'.$key.'_'.$index;
+                    // if (is_string($option)) $option = [$option];
+                ?>
+                <div class="checkbox custom-checkbox">
+                    <input type="checkbox" id="<?=$cloudeable['key'].'-'.$cloudeable['modelId'] ?>"
+                        name="<?= $name ?>[]">
+
+                    <label for="<?= $checkboxId ?>">
+                        <?= $cloudeable['label'].' | '.$cloudeable['configuration']['label'] ?>
+                    </label>
+
+                </div>
+                <?php endforeach ?>
+
+                <?php if ($isScrollable): ?>
+            </div>
+        </div>
+        <?php endif ?>
+
+    </div>
+
+</div>

@@ -1,0 +1,62 @@
+<?php
+    $fieldOptions = $cloudeables;
+    $checkedValues = null;
+    $isScrollable = count($fieldOptions) > 10;
+    
+    $quickselectEnabled = true;
+?>
+<!-- Checkbox List -->
+
+<div class="field-checkboxlist <?= $isScrollable ? 'is-scrollable' : '' ?>">
+
+
+
+
+    <div class="field-checkboxlist-inner">
+
+        <?php if ($isScrollable): ?>
+        <!-- Scrollable Checkbox list -->
+        <div class="field-checkboxlist-scrollable">
+            <div class="control-scrollbar" data-control="scrollbar">
+                <?php endif ?>
+
+                <input type="hidden" name="<?= $name ?>" value="0" />
+
+                <?php $index = 0; foreach ($fieldOptions as $key => $option): ?>
+                <?php
+                    $index++;
+                    $checkboxId = 'checkbox_'.$key.'_'.$index;
+                    // if (is_string($option)) $option = [$option];
+                ?>
+                <div class="checkbox custom-checkbox">
+                    <input type="checkbox" id="<?= $checkboxId ?>" name="<?= $name ?>[]" value="">
+
+                    <label for="<?= $checkboxId ?>">
+                        <?= $option['label'].' | '.$option['configuration']['label'] ?>
+                    </label>
+
+                </div>
+                <?php endforeach ?>
+
+                <?php if ($isScrollable): ?>
+            </div>
+        </div>
+        <?php endif ?>
+
+        <!-- Quick selection -->
+        <div class="checkboxlist-controls">
+            <div>
+                <a href="javascript:;" data-field-checkboxlist-all>
+                    <i class="icon-check-square"></i> <?= e(trans('backend::lang.form.select_all')) ?>
+                </a>
+            </div>
+            <div>
+                <a href="javascript:;" data-field-checkboxlist-none>
+                    <i class="icon-eraser"></i> <?= e(trans('backend::lang.form.select_none')) ?>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>

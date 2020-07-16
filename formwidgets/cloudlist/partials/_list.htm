@@ -1,0 +1,39 @@
+<div id="sl-0" class="control-list">
+    <table class="table data" data-control="rowlink">
+        <thead>
+            <tr>
+                <th class="list-checkbox">
+                    <div class="checkbox custom-checkbox nolabel">
+                        <!-- <input type="checkbox" id="checkboxAll" />
+                        <label for="checkboxAll">Selectionner tout</label> -->
+                    </div>
+                </th>
+                <th><a href="#">Nom</a></th>
+                <th><a href="#">Type</a></th>
+            </tr>
+        </thead>
+
+        <body>
+            <?php foreach($cloudeables as $cloudeable) : ?>
+            <tr>
+                <td class="list-checkbox">
+                    <div class="checkbox custom-checkbox nolabel">
+                        <input name="prodChecked[]" id="<?=$cloudeable['key'].'-'.$cloudeable['modelId'] ?>"
+                            type="checkbox" value="<?=$cloudeable['key'].'-'.$cloudeable['modelId'] ?>" />
+                        <label for="<?=$cloudeable['key'].'-'.$cloudeable['modelId'] ?>">Check</label>
+                    </div>
+                </td>
+                <td><?=$cloudeable['label']?></td>
+                <td><?=$cloudeable['configuration']['label']?></td>
+            </tr>
+            <?php endforeach ?>
+        </body>
+    </table>
+</div>
+<button class="btn btn-danger oc-icon-trash-o" disabled="disabled"
+    onclick="$(this).data('request-data', { checked: $('#sl-0').listWidget('getChecked')})" data-request="onLaunchCloud"
+    data-request-confirm="Voulez vous vraiment creer ces documents dans le cloud ?" data-trigger-action="enable"
+    data-trigger="#sl-0  input[type=checkbox]" data-trigger-condition="checked"
+    data-request-success="$(this).prop('disabled', 'disabled')" data-stripe-load-indicator>
+    Créer les documents selectionné
+</button>
