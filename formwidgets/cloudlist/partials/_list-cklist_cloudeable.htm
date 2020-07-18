@@ -33,14 +33,9 @@
                 <input type="hidden" name="<?= $name ?>" value="0" />
 
                 <?php $index = 0; foreach($cloudeables as $key=>$cloudeable): ?>
-                <?php
-                    $index++;
-                    $checkboxId = 'checkbox_'.$key.'_'.$index;
-                    // if (is_string($option)) $option = [$option];
-                ?>
                 <div class="checkbox custom-checkbox">
-                    <input type="checkbox" id="<?=$cloudeable['key'].'-'.$cloudeable['modelId'] ?>"
-                        name="<?= $name ?>[]">
+                    <input type="checkbox" id="<?=$cloudeable['key'].'*'.$cloudeable['modelId'] ?>"
+                        name="<?= $name ?>[]" value="">
 
                     <label for="<?= $checkboxId ?>">
                         <?= $cloudeable['label'].' | '.$cloudeable['configuration']['label'] ?>

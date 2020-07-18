@@ -1,5 +1,5 @@
 <div id="sl-0" class="control-list">
-    <table class="table data" data-control="rowlink">
+    <table class="table data" data-control="listwidget2">
         <thead>
             <tr>
                 <th class="list-checkbox">
@@ -31,9 +31,9 @@
     </table>
 </div>
 <button class="btn btn-danger oc-icon-trash-o" disabled="disabled"
-    onclick="$(this).data('request-data', { checked: $('#sl-0').listWidget('getChecked')})" data-request="onLaunchCloud"
-    data-request-confirm="Voulez vous vraiment creer ces documents dans le cloud ?" data-trigger-action="enable"
-    data-trigger="#sl-0  input[type=checkbox]" data-trigger-condition="checked"
+    onclick="$(this).data('request-data', { checked: $('#sl-0').listWidget2('getChecked')})"
+    data-request="onLaunchCloud" data-request-confirm="Voulez vous vraiment creer ces documents dans le cloud ?"
+    data-trigger-action="enable" data-trigger="#sl-0  input[type=checkbox]" data-trigger-condition="checked"
     data-request-success="$(this).prop('disabled', 'disabled')" data-stripe-load-indicator>
     Créer les documents selectionné
 </button>

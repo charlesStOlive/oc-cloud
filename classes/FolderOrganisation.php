@@ -33,19 +33,33 @@ class FolderOrganisation
 
     public function recursiveSearch($model)
     {
+        //On retrouve la classe du modele et on cherche dans la config cloud de crsm
         $modelClass = get_class($model);
-        //trace_log("modelClass " . $modelClass);
         $actualFolder = $this->configFolder->where('model', $modelClass)->first();
-        //trace_log("actualFolder");
-        //trace_log($actualFolder);
+        $actualFolderKey = $this->configFolder->where('model', $modelClass)->keys()->first();
+
         if (!$actualFolder) {
             //trace_log('pas trouvé');
-            return;
+            throw new ApplicationException('Impossible de trouver une config pour ce modèle');
         }
-        array_push($this->folderArray, $model[$actualFolder['name']]);
-        array_push($this->folderArray, $actualFolder['folder']);
+        //On rentre les infos de ce dossier.
+
+        //recherche du champs qui donnera le nom du dossier par default slug
+        $folderName = $actualFolder['column_for_name'] ?? 'slug';
+        array_push($this->folderArray, $model[$folderName]);
+
+        //si il existe un champ folder on crée un dossier
+        if ($actualFolder['folder'] ?? false) {
+            array_push($this->folderArray, $actualFolder['folder']);
+        }
+
+        //On va chercher des informations dans les dossier parents.
         if ($actualFolder['before'] ?? false) {
-            $parentId = $model[$actualFolder['key']];
+
+            //On determine la clé de liaison du model parent
+            $parentKey = $actualFolder['key'] ?? $actualFolderKey . '_id';
+            $parentId = $model[$parentKey];
+
             $previousModel = new $actualFolder['before'];
             $previousModel = $previousModel::find($parentId);
             $this->recursiveSearch($previousModel);

@@ -12,27 +12,27 @@
 
 
 
-    <div class="field-checkboxlist-inner">
+    <div id="sl-0" class="field-checkboxlist-inner" data-control="listwidget2">
 
         <?php if ($isScrollable): ?>
         <!-- Scrollable Checkbox list -->
         <div class="field-checkboxlist-scrollable">
-            <div class="control-scrollbar" data-control="scrollbar">
+            <div id="checkedList" class="control-scrollbar" data-control="scrollbar">
                 <?php endif ?>
 
                 <input type="hidden" name="<?= $name ?>" value="0" />
 
-                <?php $index = 0; foreach ($fieldOptions as $key => $option): ?>
+                <?php $index = 0; foreach ($cloudeables as $key => $cloudeable): ?>
                 <?php
-                    $index++;
-                    $checkboxId = 'checkbox_'.$key.'_'.$index;
+                    $checkboxIdVal = $cloudeable['key'].'*'.$cloudeable['modelId'];
                     // if (is_string($option)) $option = [$option];
                 ?>
-                <div class="checkbox custom-checkbox">
-                    <input type="checkbox" id="<?= $checkboxId ?>" name="<?= $name ?>[]" value="">
+                <div class="checkbox custom-checkbox list-checkbox">
+                    <input type="checkbox" id="<?= $checkboxIdVal ?>" name="prodChecked[]"
+                        value="<?= $checkboxIdVal ?>">
 
-                    <label for="<?= $checkboxId ?>">
-                        <?= $option['label'].' | '.$option['configuration']['label'] ?>
+                    <label for="<?= $checkboxIdVal ?>">
+                        <?= $cloudeable['label'].' | '.$cloudeable['configuration']['label'] ?>
                     </label>
 
                 </div>
@@ -56,6 +56,13 @@
                 </a>
             </div>
         </div>
+        <button class="btn btn-danger oc-icon-trash-o" disabled="disabled"
+            onclick="$(this).data('request-data', { checked: $('#sl-0').listWidget2('getChecked')})"
+            data-request="onLaunchCloud" data-request-confirm="Voulez vous vraiment creer ces documents dans le cloud ?"
+            data-trigger-action="enable" data-trigger="#sl-0  input[type=checkbox]" data-trigger-condition="checked"
+            data-request-success="$(this).prop('disabled', 'disabled')" data-stripe-load-indicator>
+            Créer les documents selectionné
+        </button>
 
     </div>
 
