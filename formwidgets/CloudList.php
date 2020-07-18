@@ -128,7 +128,7 @@ class CloudList extends FormWidgetBase
             } elseif ($productor == 'montages') {
                 $this->downloadMontage($modelId, $cloudeable);
             } else {
-                // $this->launchCloudeable($cloudeable);
+                $this->launchCloudeable($cloudeable);
             }
 
         }
