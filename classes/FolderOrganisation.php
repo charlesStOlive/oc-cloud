@@ -34,6 +34,8 @@ class FolderOrganisation
     public function recursiveSearch($model)
     {
         //On retrouve la classe du modele et on cherche dans la config cloud de crsm
+        //trace_log("recursiveSearch");
+        //trace_log($model->toArray());
         $modelClass = get_class($model);
         $actualFolder = $this->configFolder->where('model', $modelClass)->first();
         $actualFolderKey = $this->configFolder->where('model', $modelClass)->keys()->first();
@@ -57,11 +59,16 @@ class FolderOrganisation
         if ($actualFolder['before'] ?? false) {
 
             //On determine la clé de liaison du model parent
-            $parentKey = $actualFolder['key'] ?? $actualFolderKey . '_id';
-            $parentId = $model[$parentKey];
 
-            $previousModel = new $actualFolder['before'];
+            $previousModelClassName = new $actualFolder['before'];
+            $previousModel = new \ReflectionClass($actualFolder['before']);
+            $ClassShortName = $previousModel->getShortName();
+            $previousModel = $previousModel->newInstance();
+            //trace_log($ClassShortName);
+            $parentKey = $actualFolder['key'] ?? strtolower($ClassShortName) . '_id';
+            $parentId = $model[$parentKey];
             $previousModel = $previousModel::find($parentId);
+
             $this->recursiveSearch($previousModel);
         }
     }

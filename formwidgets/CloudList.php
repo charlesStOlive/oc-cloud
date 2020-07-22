@@ -116,7 +116,7 @@ class CloudList extends FormWidgetBase
         $cloudeables = $this->getControllerCloudOptions();
         $cloudSelecteds = post('checked');
 
-        trace_log($cloudSelecteds);
+        //trace_log($cloudSelecteds);
 
         foreach ($cloudSelecteds as $cloudSelected) {
             $selection = explode('*', $cloudSelected);
@@ -168,7 +168,7 @@ class CloudList extends FormWidgetBase
 
     public function launchCloudeable($cloudeable)
     {
-        trace_log("launchCloudeable");
+        //trace_log("launchCloudeable");
         //Recuperation de var
         $productorClass = $cloudeable['configuration']['constructor'];
         $modelId = $this->model->id;
@@ -181,9 +181,9 @@ class CloudList extends FormWidgetBase
 
     public function findCloud($cloudeables, $modelId, $productor)
     {
-        trace_log('modelId ' . $modelId);
-        trace_log('productor' . $productor);
-        trace_log($cloudeables);
+        //trace_log('modelId ' . $modelId);
+        //trace_log('productor' . $productor);
+        //trace_log($cloudeables);
         foreach ($cloudeables as $cloudeable) {
             if ($cloudeable['modelId'] == $modelId && $cloudeable['key'] == $productor) {
                 return $cloudeable;

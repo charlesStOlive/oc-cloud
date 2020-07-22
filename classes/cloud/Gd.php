@@ -11,25 +11,28 @@ use Storage;
 class Gd
 {
 
-    public function listFolderItems($folder, $onlyfileName = true)
+    public function listFolderItems($folderName, $previousFolder = "/", $onlyfileName = true)
     {
         // $folder For simplicity, this folder is assumed to exist in the root directory.
 
         // Get root directory contents...
-        $contents = collect(Storage::cloud()->listContents('/', false));
+        $contents = collect(Storage::cloud()->listContents($previousFolder, false));
 
         // Find the folder you are looking for...
         $dir = $contents->where('type', '=', 'dir')
-            ->where('filename', '=', $folder)
+            ->where('filename', '=', $folderName)
             ->first(); // There could be duplicate directory names!
 
         if (!$dir) {
-            throw new \ApplicationException("Le repertoire " . $folder . " n'existe pas");
+            //trace_log("Le repertoire " . $folderName . " n'existe pas");
+            return false;
         }
 
         // Get the files inside the folder...
         $files = collect(Storage::cloud()->listContents($dir['path'], false))
             ->where('type', '=', 'file');
+
+        //trace_log($files);
 
         $files = $files->mapWithKeys(function ($file) use ($onlyfileName) {
             $filename = $file['filename'] . '.' . $file['extension'];
@@ -144,6 +147,29 @@ class Gd
         }
         // retourne le dernier dossier crée.
         return $newDir;
+    }
+
+    public function getFile($fileName, $folderPath = "/")
+    {
+        $filename = 'test.txt';
+
+        $dir = $folderPath;
+        $recursive = false; // Get subdirectories also?
+        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+        $file = $contents
+            ->where('type', '=', 'file')
+            ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+            ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+            ->first(); // there can be duplicate file names!
+
+        //return $file; // array with file info
+
+        $rawData = Storage::cloud()->get($file['path']);
+
+        return response($rawData, 200)
+            ->header('ContentType', $file['mimetype'])
+            ->header('Content-Disposition', "attachment; filename='$filename'");
     }
 
 }
