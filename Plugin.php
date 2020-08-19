@@ -5,6 +5,7 @@ use Backend;
 use Config;
 use Event;
 use System\Classes\PluginBase;
+use View;
 use Waka\Cloud\Listener\PluginEventSubscriber;
 use Waka\Worder\Controllers\Documents as DocumentController;
 use Waka\Worder\Models\Document as DocumentModel;
@@ -87,6 +88,40 @@ class Plugin extends PluginBase
                 $path->options = $options->toArray();
             }
 
+        });
+
+        /**
+         * EVENEMENTS POUR LA SYNCRONISATION
+         */
+
+        Event::listen('popup.list.tools', function ($controller, $sync_source) {
+            if (get_class($controller) == 'Waka\Worder\Controllers\Documents' && $sync_source == 'word') {
+
+                $syncOpt = Config::get('waka.crsm::cloud.sync.word');
+                trace_log($syncOpt);
+                $data = [
+                    'type' => 'word',
+                    'label' => $syncOpt['label'],
+                ];
+                return View::make('waka.cloud::syncbutton')->withData($data);;
+            }
+
+        });
+
+        Event::listen('backend.update.prod', function ($controller) {
+
+            trace_log(in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement));
+
+            if (in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement)) {
+                $syncOpt = Config::get('waka.crsm::cloud.sync.word');
+                $data = [
+
+                    'model' => $modelClass = str_replace('\\', '\\\\', get_class($controller->formGetModel())),
+                    'modelId' => $controller->formGetModel()->id,
+                    'label' => $syncOpt['label'],
+                ];
+                return View::make('waka.cloud::synconebutton')->withData($data);;
+            }
         });
 
     }

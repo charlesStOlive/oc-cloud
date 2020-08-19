@@ -151,16 +151,14 @@ class Gd
 
     public function getFile($fileName, $folderPath = "/")
     {
-        $filename = 'test.txt';
-
         $dir = $folderPath;
         $recursive = false; // Get subdirectories also?
         $contents = collect(Storage::cloud()->listContents($dir, $recursive));
 
         $file = $contents
             ->where('type', '=', 'file')
-            ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
-            ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+            ->where('filename', '=', pathinfo($fileName, PATHINFO_FILENAME))
+            ->where('extension', '=', pathinfo($fileName, PATHINFO_EXTENSION))
             ->first(); // there can be duplicate file names!
 
         //return $file; // array with file info
@@ -170,6 +168,23 @@ class Gd
         return response($rawData, 200)
             ->header('ContentType', $file['mimetype'])
             ->header('Content-Disposition', "attachment; filename='$filename'");
+    }
+
+    public function getRawFile($fileName, $folderPath = "/")
+    {
+        $dir = $folderPath;
+        $recursive = false; // Get subdirectories also?
+        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+        $file = $contents
+            ->where('type', '=', 'file')
+            ->where('filename', '=', pathinfo($fileName, PATHINFO_FILENAME))
+            ->where('extension', '=', pathinfo($fileName, PATHINFO_EXTENSION))
+            ->first(); // there can be duplicate file names!
+
+        //return $file; // array with file info
+
+        return Storage::cloud()->get($file['path']);
     }
 
 }
