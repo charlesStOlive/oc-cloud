@@ -58,6 +58,15 @@ class Plugin extends PluginBase
 
         }
 
+        \Waka\Worder\Controllers\Documents::extend(function ($controller) {
+
+            // Implement behavior if not already implemented
+            if (!$controller->isClassExtendedWith('Waka.cloud.Behaviors.SyncFiles')) {
+                $controller->implement[] = 'Waka.cloud.Behaviors.SyncFiles';
+            }
+
+        });
+
         Event::listen('backend.form.extendFields', function ($widget) {
             $templateFolder = Config::get('waka.crsm::cloud.word_folder');
             if (!$templateFolder) {
