@@ -118,7 +118,6 @@ class Plugin extends PluginBase
             if (get_class($controller) == 'Waka\Worder\Controllers\Documents' && $sync_source == 'word') {
 
                 $syncOpt = Config::get('waka.crsm::cloud.sync.word');
-                trace_log($syncOpt);
                 $data = [
                     'type' => 'word',
                     'label' => $syncOpt['label'],
@@ -129,8 +128,6 @@ class Plugin extends PluginBase
         });
 
         Event::listen('backend.update.prod', function ($controller) {
-
-            trace_log(in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement));
 
             if (in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement)) {
                 $syncOpt = Config::get('waka.crsm::cloud.sync.word');
