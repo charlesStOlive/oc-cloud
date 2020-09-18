@@ -35,20 +35,33 @@ class SyncFiles extends ControllerBehavior
 
         return $this->makePartial('$/waka/cloud/behaviors/syncfiles/_popup.htm');
     }
+    // public function fire($job, $datas)
+    // {
+    //     if ($job) {
+    //         \Event::fire('job.create.agg', [$job->id, 'Synchronisation de X fichiers']);
+    //     }
+
+    //     $syncOpt = Config::get('waka.crsm::cloud.sync.word');
+    //     $cloudSystem = App::make('cloudSystem');
+    //     $appFolder = $syncOpt['app_folder'];
+    //     $docToSync = $datas['docToSync'];
+    //     foreach ($docToSync as $path => $docName) {
+    //         $rawData = Storage::cloud()->get($path);
+    //         Storage::put('media/' . $appFolder . '/' . $docName, $rawData);
+
+    //     }
+
+    //     if ($job) {
+    //         \Event::fire('job.end.agg', [$job]);
+    //         $job->delete();
+    //     }
+
+    // }
     public function onSyncCloud()
     {
-        $syncOpt = Config::get('waka.crsm::cloud.sync.word');
-
-        $cloudSystem = App::make('cloudSystem');
-
-        $appFolder = $syncOpt['app_folder'];
-
         $docToSync = post('docToSync');
-        foreach ($docToSync as $path => $docName) {
-            $rawData = Storage::cloud()->get($path);
-            Storage::put('media/' . $appFolder . '/' . $docName, $rawData);
-
-        }
+        $jobId = \Queue::push('\Waka\Cloud\Classes\Queue\QueueCloud@syncFiles', ['docToSync' => $docToSync]);
+        \Event::fire('job.create.sync', [$jobId, 'Sync en attente ']);
     }
 
     public function onSyncOne()
