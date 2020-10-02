@@ -2,6 +2,7 @@
 
 use Backend\Classes\FormWidgetBase;
 use Config;
+use Waka\Utils\Classes\DataSource;
 
 /**
  * MontagesList Form Widget
@@ -45,12 +46,17 @@ class CloudList extends FormWidgetBase
         $this->vars['cloudeables'] = $this->getControllerCloudOptions();
     }
 
-    public function getDataSourceFromModel(String $model)
+    public function getDataSource()
     {
-        $modelClassDecouped = explode('\\', $model);
-        $modelClassName = array_pop($modelClassDecouped);
-        return \Waka\Utils\Models\DataSource::where('model', '=', $modelClassName)->first();
+        return new DataSource(get_class($this->model), 'class');
     }
+
+    // public function getDataSourceFromModel(String $model)
+    // {
+    //     $modelClassDecouped = explode('\\', $model);
+    //     $modelClassName = array_pop($modelClassDecouped);
+    //     return \Waka\Utils\Models\DataSource::where('model', '=', $modelClassName)->first();
+    // }
 
     public function getControllerCloudOptions()
     {
@@ -59,14 +65,14 @@ class CloudList extends FormWidgetBase
         if (!$options) {
             throw new SystemException('Config waka.crsm::cloud.controller manquant');
         }
-        $dataSource = $this->getDataSourceFromModel(get_class($this->model));
+        $ds = $this->getDataSource();
 
         $cloudeables = [];
 
         foreach ($options as $typeOption => $option) {
             if ($option['show'] ?? false) {
                 if ($typeOption != 'images' && $typeOption != 'montages') {
-                    $potentialProds = $dataSource->getPartialOptions($this->model->id, $option['class']);
+                    $potentialProds = $ds->getPartialOptions($this->model->id, $option['class']);
                     foreach ($potentialProds as $key => $value) {
                         $obj = [
                             'modelId' => $key,
