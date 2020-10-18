@@ -66,12 +66,14 @@ class CloudList extends FormWidgetBase
             throw new SystemException('Config waka.crsm::cloud.controller manquant');
         }
         $ds = $this->getDataSource();
+        $ds->instanciateModel($this->model->id);
 
         $cloudeables = [];
 
         foreach ($options as $typeOption => $option) {
+            trace_log($option);
             if ($option['show'] ?? false) {
-                if ($typeOption != 'images' && $typeOption != 'montages') {
+                if ($typeOption != 'images' && $typeOption != 'montages' && $typeOption !='cloudis') {
                     $potentialProds = $ds->getPartialOptions($this->model->id, $option['class']);
                     foreach ($potentialProds as $key => $value) {
                         $obj = [
@@ -84,14 +86,14 @@ class CloudList extends FormWidgetBase
                     }
 
                 }
-                if ($typeOption == 'images' || $typeOption == 'montages') {
-                    $groupedImages = new \Waka\Cloudis\Classes\GroupedImages($this->model);
+                if ($typeOption == 'images' || $typeOption == 'montages' || $typeOption == 'cloudis') {
+                    //$groupedImages = new \Waka\Cloudis\Classes\GroupedImages($this->model);
 
-                    if ($typeOption == 'images') {
-                        $allImages = $groupedImages->getModelImages();
+                    if ($typeOption == 'cloudis') {
+                        $allImages = $ds->wimages->listCloudis($this->model);
                     }
                     if ($typeOption == 'montages') {
-                        $allImages = $groupedImages->getModelMonntages();
+                        $allImages = $ds->wimages->listMontages($this->model);
                     }
                     foreach ($allImages as $key => $value) {
                         $obj = [

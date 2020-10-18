@@ -77,7 +77,7 @@ class QueueCloud
     {
         $filename = str_slug($cloudSelected['label']) . '.png';
         $montage = $model->montages->find($modelId);
-        $url = $model->getCloudiModelUrl($montage);
+        $url = $model->getMontage($montage);
         $this->copytocloud($model, $url, $filename);
     }
 
