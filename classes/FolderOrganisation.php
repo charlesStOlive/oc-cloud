@@ -17,7 +17,7 @@ class FolderOrganisation
 
     public function __construct()
     {
-        $this->configFolder = new Collection(Config::get('waka.crsm::cloud.folderModel'));
+        $this->configFolder = new Collection(Config::get('waka.wconfig::cloud.folderModel'));
         if (!$this->configFolder) {
             throw new ApplicationException('La config folderModel est manquante');
         }
@@ -33,7 +33,7 @@ class FolderOrganisation
 
     public function recursiveSearch($model)
     {
-        //On retrouve la classe du modele et on cherche dans la config cloud de crsm
+        //On retrouve la classe du modele et on cherche dans la config cloud de wconfig
         //trace_log("recursiveSearch");
         //trace_log($model->toArray());
         $modelClass = get_class($model);

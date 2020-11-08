@@ -60,10 +60,10 @@ class Plugin extends PluginBase
 
         Event::subscribe(new PluginEventSubscriber());
 
-        if (Config::get('waka.crsm::cloud.class')) {
+        if (Config::get('waka.wconfig::cloud.class')) {
 
             App::bind('cloudSystem', function ($app) {
-                $cloudClass = Config::get('waka.crsm::cloud.class');
+                $cloudClass = Config::get('waka.wconfig::cloud.class');
                 return new $cloudClass;
             });
 
@@ -79,7 +79,7 @@ class Plugin extends PluginBase
         });
 
         Event::listen('backend.form.extendFields', function ($widget) {
-            $templateFolder = Config::get('waka.crsm::cloud.word_folder');
+            $templateFolder = Config::get('waka.wconfig::cloud.word_folder');
             if (!$templateFolder) {
                 return;
             }
@@ -117,7 +117,7 @@ class Plugin extends PluginBase
         Event::listen('popup.list.tools', function ($controller, $sync_source) {
             if (get_class($controller) == 'Waka\Worder\Controllers\Documents' && $sync_source == 'word') {
 
-                $syncOpt = Config::get('waka.crsm::cloud.sync.word');
+                $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
                 $data = [
                     'type' => 'word',
                     'label' => $syncOpt['label'],
@@ -130,7 +130,7 @@ class Plugin extends PluginBase
         Event::listen('backend.update.prod', function ($controller) {
 
             if (in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement)) {
-                $syncOpt = Config::get('waka.crsm::cloud.sync.word');
+                $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
                 $data = [
 
                     'model' => $modelClass = str_replace('\\', '\\\\', get_class($controller->formGetModel())),

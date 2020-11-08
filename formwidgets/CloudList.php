@@ -61,9 +61,9 @@ class CloudList extends FormWidgetBase
     public function getControllerCloudOptions()
     {
 
-        $options = Config::get('waka.crsm::cloud.controller');
+        $options = Config::get('waka.wconfig::cloud.controller');
         if (!$options) {
-            throw new SystemException('Config waka.crsm::cloud.controller manquant');
+            throw new SystemException('Config waka.wconfig::cloud.controller manquant');
         }
         $ds = $this->getDataSource();
         $ds->instanciateModel($this->model->id);
@@ -73,7 +73,7 @@ class CloudList extends FormWidgetBase
         foreach ($options as $typeOption => $option) {
             //trace_log($option);
             if ($option['show'] ?? false) {
-                if ($typeOption != 'images' && $typeOption != 'montages' && $typeOption !='cloudis') {
+                if ($typeOption != 'images' && $typeOption != 'montages' && $typeOption != 'cloudis') {
                     $potentialProds = $ds->getPartialOptions($this->model->id, $option['class']);
                     foreach ($potentialProds as $key => $value) {
                         $obj = [
