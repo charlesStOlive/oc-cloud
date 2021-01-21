@@ -53,13 +53,20 @@ class Gd
 
     public function findOrCreateDir($folderName, $parentDir = false)
     {
+        //trace_log("recherche du dossier ||");
+        //trace_log($folderName);
+        //trace_log($parentDir);
 
         $dir = $this->getDir($folderName, $parentDir);
+        //trace_log("si dossier existant");
+        //trace_log($dir);
 
         if (!$dir) {
-
+            //trace_log("si dossier pas existant");
             $dir = Storage::cloud()->makeDirectory($parentDir['path'] . '/' . $folderName);
+            //trace_log($dir);
             $dir = $this->getDir($folderName, $parentDir);
+            //trace_log($dir);
 
         }
 
@@ -76,10 +83,10 @@ class Gd
         }
 
         $contents = collect(Storage::cloud()->listContents($parentDir['path'], false));
-
         $dir = $contents->where('type', '=', 'dir')
             ->where('filename', '=', $folderName)
             ->first(); // There could be duplicate directory names!
+
         return $dir;
     }
 
@@ -136,16 +143,21 @@ class Gd
 
     public function createDirFromArray($folderArray)
     {
+        //trace_log($folderArray);
         $dirFileCollection = $folderArray;
         $newDir = false;
         foreach ($dirFileCollection as $folder) {
             if (!$newDir) {
+                //trace_log("pas de newDir");
                 $newDir = $this->findOrCreateDir($folder);
             } else {
                 $newDir = $this->findOrCreateDir($folder, $newDir);
+
             }
         }
         // retourne le dernier dossier crée.
+        //trace_log("New Dir recréee ||");
+        //trace_log($newDir);
         return $newDir;
     }
 

@@ -24,11 +24,15 @@ class FolderOrganisation
         $this->folderArray = [];
     }
 
-    public function getFolder($model)
+    public function getFolder($model, $lot = null)
     {
-        $this->folderArray = [];
-        $this->recursiveSearch($model);
-        return array_reverse($this->folderArray);
+        if (!$lot) {
+            $this->folderArray = [];
+            $this->recursiveSearch($model);
+            return array_reverse($this->folderArray);
+        } else {
+
+        }
     }
 
     public function recursiveSearch($model)
@@ -48,7 +52,9 @@ class FolderOrganisation
 
         //recherche du champs qui donnera le nom du dossier par default slug
         $folderName = $actualFolder['column_for_name'] ?? 'slug';
-        array_push($this->folderArray, $model[$folderName]);
+        $strName = str_slug($model[$folderName], "_");
+
+        array_push($this->folderArray, $strName);
 
         //si il existe un champ folder on crée un dossier
         if ($actualFolder['folder'] ?? false) {

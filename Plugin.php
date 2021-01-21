@@ -117,6 +117,11 @@ class Plugin extends PluginBase
         Event::listen('popup.list.tools', function ($controller, $sync_source) {
             if (get_class($controller) == 'Waka\Worder\Controllers\Documents' && $sync_source == 'word') {
 
+                $user = \BackendAuth::getUser();
+                if (!$user->hasAccess('waka.cloud.sync_word')) {
+                    return;
+                }
+
                 $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
                 $data = [
                     'type' => 'word',
@@ -130,6 +135,12 @@ class Plugin extends PluginBase
         Event::listen('backend.update.prod', function ($controller) {
 
             if (in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement)) {
+
+                $user = \BackendAuth::getUser();
+                if (!$user->hasAccess('waka.cloud.sync_word')) {
+                    return;
+                }
+
                 $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
                 $data = [
 
@@ -138,6 +149,24 @@ class Plugin extends PluginBase
                     'label' => $syncOpt['label'],
                 ];
                 return View::make('waka.cloud::synconebutton')->withData($data);;
+            }
+        });
+
+        Event::listen('backend.top.index', function ($controller) {
+
+            $user = \BackendAuth::getUser();
+            if (!$user->hasAccess('waka.cloud.lot')) {
+                return;
+            }
+
+            if (in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement)) {
+                // $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
+                $data = [
+
+                    'model' => $modelClass = str_replace('\\', '\\\\', $controller->listGetConfig()->modelClass),
+                    'label' => 'Lot sur le Cloud',
+                ];
+                return View::make('waka.cloud::syncLot')->withData($data);;
             }
         });
 
@@ -168,12 +197,18 @@ class Plugin extends PluginBase
      */
     public function registerPermissions()
     {
-        return []; // Remove this line to activate
-
         return [
-            'waka.cloud.some_permission' => [
+            'waka.cloud.lot' => [
                 'tab' => 'cloud',
-                'label' => 'Some permission',
+                'label' => 'Droit sur la création de lots',
+            ],
+            'waka.cloud.sync_word' => [
+                'tab' => 'cloud',
+                'label' => 'Droit sur la synchronisation des docs word',
+            ],
+            'waka.cloud.create_file' => [
+                'tab' => 'cloud',
+                'label' => 'Droit de création sur le cloud',
             ],
         ];
     }

@@ -1,0 +1,7 @@
+<button href="javascript:;"
+        class="btn btn-secondary oc-icon-cloud"
+        data-control="popup"
+        data-handler="onLotPopup"
+        onclick="$(this).data('request-data', { checked: $('.control-list').listWidget('getChecked'), model:'{{data.model}}' })">
+    {{ 'waka.cloud::lang.menu.btn_lot' | trans }}
+</button>

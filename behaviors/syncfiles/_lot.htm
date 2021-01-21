@@ -1,0 +1,103 @@
+<?= Form::open() ?>
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button"
+                class="close"
+                data-dismiss="popup">×</button>
+        <h4 class="modal-title">
+            <?= e(trans('waka.cloud::lang.popup.title')) ?>
+        </h4>
+    </div>
+
+    <input type="hidden"
+           name="model"
+           value="<?= $model ?>" />
+
+    <div class="modal-body">
+        <div class="radio-field inline-options">
+            <label>
+                <?=Lang::get("waka.cloud::lang.popup.choose_who")?>
+            </label>
+            <div class="radio custom-radio">
+                <input checked="checked"
+                       name="lotType"
+                       value="filtered"
+                       type="radio"
+                       id="filtered">
+                <label for="filtered">
+                    <?=e(trans("waka.cloud::lang.popup.filtered"))?>
+                </label>
+                <p class="help-block">Nombre :
+                    <?=$filtered?>
+                </p>
+            </div>
+            <?php if($countCheck) : ?>
+            <div class="radio custom-radio">
+                <input name="lotType"
+                       value="checked"
+                       type="radio"
+                       id="checked">
+                <label for="checked">
+                    <?=e(trans("waka.cloud::lang.popup.checked"))?>
+                </label>
+                <p class="help-block">Nombre :
+                    <?=$countCheck?>
+                </p>
+            </div>
+            <?php endIf ?>
+
+        </div>
+        <div class="form-group">
+            <label>
+                <?=Lang::get("waka.cloud::lang.popup.lot")?>
+            </label>
+            <label class="custom-switch">
+                <input type="checkbox"
+                       name="lot" />
+                <span><span>On</span><span>Off</span></span>
+                <a class="slide-button"></a>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <select class="form-control custom-select"
+                    data-request="onSelectCloudType"
+                    name="classType">
+                <option value=""
+                        disabled
+                        selected>
+                    <?=Lang::get("waka.cloud::lang.popup.format")?>
+                </option>
+                <?php foreach($options as $key => $value)  { ?>
+                <option value="<?=$key?>">
+                    <?=$value?>
+                </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div id="publicationDataWidget">
+            <!--Emplacement pour les data-->
+        </div>
+    </div>
+
+
+
+
+    <div class="modal-footer">
+        <button type="submit"
+                data-request="onCreateLot"
+                data-request-data="redirect:0"
+                class="btn btn-primary">
+            Créer un lot
+        </button>
+
+        <button type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+            Annuler
+        </button>
+    </div>
+</div>
+
+<?= Form::close() ?>
