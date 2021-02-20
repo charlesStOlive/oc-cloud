@@ -1,4 +1,4 @@
-<?= Form::open() ?>
+<?= Form::ajax('onCreateLot', ['data-popup-load-indicator' => true]) ?>
 <div class="modal-content">
     <div class="modal-header">
         <button type="button"
@@ -86,8 +86,6 @@
 
     <div class="modal-footer">
         <button type="submit"
-                data-request="onCreateLot"
-                data-request-data="redirect:0"
                 class="btn btn-primary">
             Créer un lot
         </button>
