@@ -194,7 +194,7 @@ class Plugin extends PluginBase
             });
 
             // \Waka\Pdfer\Behaviors\PdfBehavior::extend(function ($behavior) {
-            //     trace_log($behavior->methodExists('onCloudPdfValidation'));
+            //     //trace_log($behavior->methodExists('onCloudPdfValidation'));
             //     if (!$behavior->methodExists('onCloudPdfValidation')) {
             //         $behavior->addDynamicMethod('onCloudPdfValidation', function () use ($behavior) {
             //             $errors = $behavior->CheckValidation(\Input::all());
