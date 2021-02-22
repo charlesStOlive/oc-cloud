@@ -30,6 +30,10 @@ class Plugin extends PluginBase
         ];
     }
 
+    public $require = [
+        'Waka.Pdfer',
+    ];
+
     /**
      * Register method, called when the plugin is first registered.
      *
@@ -169,7 +173,55 @@ class Plugin extends PluginBase
                 return View::make('waka.cloud::syncLot')->withData($data);;
             }
         });
+        //Création des méthodes et des boutons pour le PDF.
+        if (class_exists('\Waka\Pdfer\Classes\PdfCreator')) {
+            \Waka\Pdfer\Classes\PdfCreator::extend(function ($creator) {
+                $creator->addDynamicMethod('renderCloud', function ($modelId, $lot = false) use ($creator) {
+                    $data = $creator->prepareCreatorVars($modelId);
+                    $pdf = $creator->createPdf($data);
+                    $pdfContent = $pdf->output();
+                    $cloudSystem = App::make('cloudSystem');
+                    $lastFolderDir = null;
+                    if ($lot) {
+                        $lastFolderDir = $cloudSystem->createDirFromArray(['lots']);
+                    } else {
+                        $folderOrg = new \Waka\Cloud\Classes\FolderOrganisation();
+                        $folders = $folderOrg->getFolder($creator->ds->model);
+                        $lastFolderDir = $cloudSystem->createDirFromArray($folders);
+                    }
+                    \Storage::cloud()->put($lastFolderDir['path'] . '/' . $data['fileName'], $pdfContent);
+                });
+            });
 
+            // \Waka\Pdfer\Behaviors\PdfBehavior::extend(function ($behavior) {
+            //     trace_log($behavior->methodExists('onCloudPdfValidation'));
+            //     if (!$behavior->methodExists('onCloudPdfValidation')) {
+            //         $behavior->addDynamicMethod('onCloudPdfValidation', function () use ($behavior) {
+            //             $errors = $behavior->CheckValidation(\Input::all());
+            //             if ($errors) {
+            //                 throw new \ValidationException(['error' => $errors]);
+            //             }
+            //             $wakaPdfId = post('wakaPdfId');
+            //             $modelId = post('modelId');
+            //             return PdfCreator::find($wakaPdfId)->renderCloud($modelId);
+            //         });
+            //     }
+            //     $behavior->methodExists('onCloudPdfValidation');
+
+            // });
+            Event::listen('backend.creator.popup.validation', function ($controller, $modelId) {
+                $user = \BackendAuth::getUser();
+                if (!$user->hasAccess('waka.cloud.create_file')) {
+                    return;
+                }
+                if (Config('wcli.wconfig::cloud.controller.pdf.show')) {
+                    $data = [
+                        'modelId' => $modelId,
+                    ];
+                    return View::make('waka.cloud::cloud_downlad_btn')->withData($data);;
+                }
+            });
+        }
     }
 
     /**
