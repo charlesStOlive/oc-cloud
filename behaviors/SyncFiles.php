@@ -127,7 +127,7 @@ class SyncFiles extends ControllerBehavior
     public function onCallSync()
     {
         $sync_type = post('sync_type');
-        $syncOpt = Config::get('waka.wconfig::cloud.sync.' . $sync_type);
+        $syncOpt = Config::get('wcli.wconfig::cloud.sync.' . $sync_type);
         $cloudFolder = $syncOpt['cloud_folder'];
         $appFolder = $syncOpt['app_folder'];
 
@@ -148,7 +148,7 @@ class SyncFiles extends ControllerBehavior
     //         \Event::fire('job.create.agg', [$job->id, 'Synchronisation de X fichiers']);
     //     }
 
-    //     $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
+    //     $syncOpt = Config::get('wcli.wconfig::cloud.sync.word');
     //     $cloudSystem = App::make('cloudSystem');
     //     $appFolder = $syncOpt['app_folder'];
     //     $docToSync = $datas['docToSync'];
@@ -173,7 +173,7 @@ class SyncFiles extends ControllerBehavior
 
     public function onSyncOne()
     {
-        $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
+        $syncOpt = Config::get('wcli.wconfig::cloud.sync.word');
         $cloudFolder = $syncOpt['cloud_folder'];
         $appFolder = $syncOpt['app_folder'];
         //

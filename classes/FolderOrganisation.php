@@ -17,7 +17,7 @@ class FolderOrganisation
 
     public function __construct()
     {
-        $this->configFolder = new Collection(Config::get('waka.wconfig::cloud.folderModel'));
+        $this->configFolder = new Collection(Config::get('wcli.wconfig::cloud.folderModel'));
         if (!$this->configFolder) {
             throw new ApplicationException('La config folderModel est manquante');
         }

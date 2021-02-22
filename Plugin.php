@@ -60,10 +60,10 @@ class Plugin extends PluginBase
 
         Event::subscribe(new PluginEventSubscriber());
 
-        if (Config::get('waka.wconfig::cloud.class')) {
+        if (Config::get('wcli.wconfig::cloud.class')) {
 
             App::bind('cloudSystem', function ($app) {
-                $cloudClass = Config::get('waka.wconfig::cloud.class');
+                $cloudClass = Config::get('wcli.wconfig::cloud.class');
                 return new $cloudClass;
             });
 
@@ -79,7 +79,7 @@ class Plugin extends PluginBase
         });
 
         Event::listen('backend.form.extendFields', function ($widget) {
-            $templateFolder = Config::get('waka.wconfig::cloud.word_folder');
+            $templateFolder = Config::get('wcli.wconfig::cloud.word_folder');
             if (!$templateFolder) {
                 return;
             }
@@ -122,7 +122,7 @@ class Plugin extends PluginBase
                     return;
                 }
 
-                $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
+                $syncOpt = Config::get('wcli.wconfig::cloud.sync.word');
                 $data = [
                     'type' => 'word',
                     'label' => $syncOpt['label'],
@@ -141,7 +141,7 @@ class Plugin extends PluginBase
                     return;
                 }
 
-                $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
+                $syncOpt = Config::get('wcli.wconfig::cloud.sync.word');
                 $data = [
 
                     'model' => $modelClass = str_replace('\\', '\\\\', get_class($controller->formGetModel())),
@@ -160,7 +160,7 @@ class Plugin extends PluginBase
             }
 
             if (in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement)) {
-                // $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
+                // $syncOpt = Config::get('wcli.wconfig::cloud.sync.word');
                 $data = [
 
                     'model' => $modelClass = str_replace('\\', '\\\\', $controller->listGetConfig()->modelClass),

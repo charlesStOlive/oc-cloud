@@ -61,9 +61,9 @@ class CloudList extends FormWidgetBase
     public function getControllerCloudOptions()
     {
 
-        $options = Config::get('waka.wconfig::cloud.controller');
+        $options = Config::get('wcli.wconfig::cloud.controller');
         if (!$options) {
-            throw new SystemException('Config waka.wconfig::cloud.controller manquant');
+            throw new \SystemException('Config wcli.wconfig::cloud.controller manquant');
         }
         $ds = $this->getDataSource();
         $ds->instanciateModel($this->model->id);

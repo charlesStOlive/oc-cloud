@@ -14,7 +14,7 @@ class QueueCloud
             \Event::fire('job.start.sync', [$job, 'Synchronisation de ' . count($docToSync) . ' fichiers']);
         }
 
-        $syncOpt = Config::get('waka.wconfig::cloud.sync.word');
+        $syncOpt = Config::get('wcli.wconfig::cloud.sync.word');
         $cloudSystem = App::make('cloudSystem');
         $appFolder = $syncOpt['app_folder'];
 
