@@ -24,4 +24,12 @@ return [
         'lot' => "Crée les documents dans le dossier : 'lots'",
         "flash" => "Créartions en cours, referez vous aux taches systhèmes",
     ],
+    'pdf' => [
+        'popup_title' => "Créer un PDF sur le cloud",
+        'popup_lot_title' => "Créer un lot de PDF dans le cloud",
+    ],
+    'word' => [
+        'popup_title' => "Créer un Word sur le cloud",
+        'popup_lot_title' => "Créer un lot de Word dans le cloud",
+    ],
 ];

@@ -1,84 +1,82 @@
 <?php namespace Waka\Cloud\Behaviors;
 
-use Waka\Pdfer\Behaviors\PdfBehavior;
-use Waka\Pdfer\Classes\PdfCreator;
 use Waka\Utils\Classes\DataSource;
+use Waka\Worder\Behaviors\WordBehavior;
+use Waka\Worder\Classes\WordCreator;
 
-class CloudPdf extends PdfBehavior
+class CloudWord extends WordBehavior
 {
     /**
      * Appel du popup pour un cloud unique
      */
-    public function onLoadCloudPdfBehaviorForm()
+    public function onLoadCloudWordBehaviorForm()
     {
         $modelClass = post('modelClass');
         $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getPartialOptions($modelId, 'Waka\Pdfer\Models\WakaPdf');
+        $options = $ds->getPartialOptions($modelId, 'Waka\Worder\Models\Document');
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_popup.htm');
+        return $this->makePartial('$/waka/cloud/behaviors/cloudword/_popup.htm');
     }
     /**
      * Appel du conteneur popupIndex pour un cloud unique
      */
-    public function onLoadCloudPdfBehaviorContentForm()
+    public function onLoadCloudWordBehaviorContentForm()
     {
         $modelClass = post('modelClass');
         $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getPartialOptions($modelId, 'Waka\Pdfer\Models\WakaPdf');
+        $options = $ds->getPartialOptions($modelId, 'Waka\Worder\Models\Document');
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
         return [
-            '#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_content.htm'),
+            '#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_content.htm'),
         ];
     }
     /**
      * Appel du conteneur popupLot pour lot
      */
-    public function onLoadLotPdfBehaviorContentForm()
+    public function onLoadLotWordBehaviorContentForm()
     {
         $modelClass = post('modelClass');
         $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getPartialOptions($modelId, 'Waka\Pdfer\Models\WakaPdf');
+        $options = $ds->getPartialOptions($modelId, 'Waka\Worder\Models\Document');
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
         return [
-            '#popupLotContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_lot.htm'),
+            '#popupLotContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm'),
         ];
     }
 
     /**
      * Validation cloud unique
      */
-    public function onCloudPdfValidation()
+    public function onCloudWordValidation()
     {
-        //trace_log('onCloudPdfValidation');
-        //trace_log(\Input::all());
         $errors = $this->CheckValidation(\Input::all());
         if ($errors) {
             throw new \ValidationException(['error' => $errors]);
         }
         $productorId = post('productorId');
         $modelId = post('modelId');
-        return PdfCreator::find($productorId)->renderCloud($modelId);
+        return WordCreator::find($productorId)->renderCloud($modelId);
     }
 
     /**
      * Validation cloud multiple
      */
-    public function onCloudLotPdfValidation()
+    public function onCloudLotWordValidation()
     {
 
     }
