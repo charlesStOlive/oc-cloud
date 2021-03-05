@@ -78,6 +78,5 @@ class CloudWord extends WordBehavior
      */
     public function onCloudLotWordValidation()
     {
-
     }
 }

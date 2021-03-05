@@ -80,6 +80,5 @@ class CloudPdf extends PdfBehavior
      */
     public function onCloudLotPdfValidation()
     {
-
     }
 }

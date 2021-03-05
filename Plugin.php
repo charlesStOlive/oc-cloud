@@ -41,7 +41,6 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-
     }
 
     /**
@@ -65,12 +64,10 @@ class Plugin extends PluginBase
         Event::subscribe(new PluginEventSubscriber());
 
         if (Config::get('wcli.wconfig::cloud.class')) {
-
             App::bind('cloudSystem', function ($app) {
                 $cloudClass = Config::get('wcli.wconfig::cloud.class');
                 return new $cloudClass;
             });
-
         }
 
         \Waka\Worder\Controllers\Documents::extend(function ($controller) {
@@ -79,7 +76,6 @@ class Plugin extends PluginBase
             if (!$controller->isClassExtendedWith('Waka.cloud.Behaviors.SyncFiles')) {
                 $controller->implement[] = 'Waka.cloud.Behaviors.SyncFiles';
             }
-
         });
 
         Event::listen('backend.form.extendFields', function ($widget) {
@@ -99,7 +95,9 @@ class Plugin extends PluginBase
                 //tracelog("erreur model");
                 return;
             }
-            if ($widget->isNested) {return;}
+            if ($widget->isNested) {
+                return;
+            }
 
             // This includes the fields from the parent form instead instead...
 
@@ -111,7 +109,6 @@ class Plugin extends PluginBase
                 $options = $cloudSystem->listFolderItems($templateFolder);
                 $path->options = $options->toArray();
             }
-
         });
 
         /**
@@ -120,7 +117,6 @@ class Plugin extends PluginBase
 
         Event::listen('popup.list.tools', function ($controller, $sync_source) {
             if (get_class($controller) == 'Waka\Worder\Controllers\Documents' && $sync_source == 'word') {
-
                 $user = \BackendAuth::getUser();
                 if (!$user->hasAccess('waka.cloud.sync_word')) {
                     return;
@@ -131,15 +127,14 @@ class Plugin extends PluginBase
                     'type' => 'word',
                     'label' => $syncOpt['label'],
                 ];
-                return View::make('waka.cloud::syncbutton')->withData($data);;
+                return View::make('waka.cloud::syncbutton')->withData($data);
+                ;
             }
-
         });
 
         Event::listen('backend.update.prod.word', function ($controller) {
 
             if (in_array('Waka.cloud.Behaviors.SyncFiles', $controller->implement)) {
-
                 $user = \BackendAuth::getUser();
                 if (!$user->hasAccess('waka.cloud.sync_word')) {
                     return;
@@ -152,7 +147,8 @@ class Plugin extends PluginBase
                     'modelId' => $controller->formGetModel()->id,
                     'label' => $syncOpt['label'],
                 ];
-                return View::make('waka.cloud::synconebutton')->withData($data);;
+                return View::make('waka.cloud::synconebutton')->withData($data);
+                ;
             }
         });
 
@@ -236,7 +232,6 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return []; // Remove this line to activate
-
     }
 
     public function registerFormWidgets()

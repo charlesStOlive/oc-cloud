@@ -84,7 +84,6 @@ class CloudList extends FormWidgetBase
                         ];
                         array_push($cloudeables, $obj);
                     }
-
                 }
                 if ($typeOption == 'images' || $typeOption == 'montages' || $typeOption == 'cloudis') {
                     //$groupedImages = new \Waka\Cloudis\Classes\GroupedImages($this->model);
@@ -105,9 +104,7 @@ class CloudList extends FormWidgetBase
                         ];
                         array_push($cloudeables, $obj);
                     }
-
                 }
-
             }
         }
         return $cloudeables;
@@ -132,7 +129,6 @@ class CloudList extends FormWidgetBase
         // $coin->createFromModel(null, $datas);
         $jobId = \Queue::push('\Waka\Cloud\Classes\Queue\QueueCloud@createFromModel', $datas);
         \Event::fire('job.create.sync', [$jobId, 'Création por ' . $this->model->name . ' en attente ']);
-
     }
 
     /**

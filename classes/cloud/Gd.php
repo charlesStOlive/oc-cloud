@@ -67,7 +67,6 @@ class Gd
             //trace_log($dir);
             $dir = $this->getDir($folderName, $parentDir);
             //trace_log($dir);
-
         }
 
         return $dir;
@@ -117,7 +116,6 @@ class Gd
         return response($rawData, 200)
             ->header('ContentType', $file['mimetype'])
             ->header('Content-Disposition', "attachment; filename='$filename'");
-
     }
 
     public function putFileInDir($pathAndFIleName, $fileToPutPath)
@@ -138,7 +136,6 @@ class Gd
         $fileData = File::get($fileToPutPath);
 
         Storage::cloud()->put($newDir['path'] . '/' . $fileName, $fileData);
-
     }
 
     public function createDirFromArray($folderArray)
@@ -152,7 +149,6 @@ class Gd
                 $newDir = $this->findOrCreateDir($folder);
             } else {
                 $newDir = $this->findOrCreateDir($folder, $newDir);
-
             }
         }
         // retourne le dernier dossier crée.
@@ -198,5 +194,4 @@ class Gd
 
         return Storage::cloud()->get($file['path']);
     }
-
 }

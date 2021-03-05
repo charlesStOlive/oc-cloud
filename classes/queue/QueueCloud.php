@@ -21,14 +21,12 @@ class QueueCloud
         foreach ($docToSync as $path => $docName) {
             $rawData = Storage::cloud()->get($path);
             Storage::put('media/' . $appFolder . '/' . $docName, $rawData);
-
         }
 
         if ($job) {
             \Event::fire('job.end.sync', [$job]);
             $job->delete();
         }
-
     }
     public function createFromModel($job, $data)
     {
@@ -70,7 +68,6 @@ class QueueCloud
         $filename = str_slug($cloudSelected['label']) . '.png';
         $url = $model->{$imageName}->getUrl([]);
         $this->copytocloud($model, $url, $filename);
-
     }
 
     public function downloadMontage($model, $modelId, $cloudSelected)

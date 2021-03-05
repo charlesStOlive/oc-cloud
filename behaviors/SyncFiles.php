@@ -65,7 +65,6 @@ class SyncFiles extends ControllerBehavior
         return [
             '#publicationDataWidget' => $this->makePartial('$/waka/cloud/behaviors/syncfiles/_widget_data.htm'),
         ];
-
     }
 
     public function onCreateLot()
@@ -105,7 +104,6 @@ class SyncFiles extends ControllerBehavior
         }
         Flash::info(Lang::get('waka.cloud::lang.popup.flash'));
         return \Redirect::refresh();
-
     }
 
     public function CheckIndexValidation($inputs)
@@ -189,6 +187,5 @@ class SyncFiles extends ControllerBehavior
         $rawData = $cloudSystem->getRawFile($fileName, $cloudFolderDir['path']);
         Storage::put('media/' . $appFolder . '/' . $fileName, $rawData);
         \Flash::success("Fichier synchronisé");
-
     }
 }

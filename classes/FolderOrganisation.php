@@ -31,7 +31,6 @@ class FolderOrganisation
             $this->recursiveSearch($model);
             return array_reverse($this->folderArray);
         } else {
-
         }
     }
 
@@ -63,7 +62,6 @@ class FolderOrganisation
 
         //On va chercher des informations dans les dossier parents.
         if ($actualFolder['before'] ?? false) {
-
             //On determine la clé de liaison du model parent
 
             $previousModelClassName = new $actualFolder['before'];
@@ -78,5 +76,4 @@ class FolderOrganisation
             $this->recursiveSearch($previousModel);
         }
     }
-
 }

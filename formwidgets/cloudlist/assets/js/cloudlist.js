@@ -26,8 +26,9 @@
          */
         $('.list-checkbox input[type="checkbox"]', list).each(function () {
             var $el = $(this)
-            if ($el.is(':checked'))
+            if ($el.is(':checked')) {
                 $el.closest('tr').addClass('active')
+            }
         })
 
         list.on('change', '.list-checkbox input[type="checkbox"]', function () {
@@ -50,8 +51,9 @@
 
         return $('.list-checkbox input[type="checkbox"]', list).map(function () {
             var $el = $(this)
-            if ($el.is(':checked'))
+            if ($el.is(':checked')) {
                 return $el.val()
+            }
         }).get();
     }
 
@@ -73,9 +75,15 @@
             var $this = $(this)
             var data = $this.data('oc.listwidget2')
             var options = $.extend({}, ListWidget2.DEFAULTS, $this.data(), typeof option == 'object' && option)
-            if (!data) $this.data('oc.listwidget2', (data = new ListWidget2(this, options)))
-            if (typeof option == 'string') result = data[option].apply(data, args)
-            if (typeof result != 'undefined') return false
+            if (!data) {
+                $this.data('oc.listwidget2', (data = new ListWidget2(this, options)))
+                if (typeof option == 'string') {
+                    result = data[option].apply(data, args)
+                    if (typeof result != 'undefined') {
+                        return false
+                    }
+                }
+            }
         })
 
         return result ? result : this
@@ -94,7 +102,7 @@
     // LIST WIDGET HELPERS
     // =================
 
-    if ($.oc === undefined)
+    if ($.oc === undefined) {
         $.oc = {}
 
     // $.oc.listToggleChecked = function (el) {
@@ -112,8 +120,8 @@
     // LIST WIDGET DATA-API
     // ==============
 
-    $(document).render(function () {
-        $('[data-control="listwidget2"]').listWidget2();
-    })
-
+        $(document).render(function () {
+            $('[data-control="listwidget2"]').listWidget2();
+        })
+    }
 }(window.jQuery);
