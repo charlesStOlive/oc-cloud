@@ -74,7 +74,7 @@ class CloudList extends FormWidgetBase
             //trace_log($option);
             if ($option['show'] ?? false) {
                 if ($typeOption != 'images' && $typeOption != 'montages' && $typeOption != 'cloudis') {
-                    $potentialProds = $ds->getPartialOptions($this->model->id, $option['class']);
+                    $potentialProds = $ds->getProductorOptions($option['class'], $this->model->id);
                     foreach ($potentialProds as $key => $value) {
                         $obj = [
                             'modelId' => $key,

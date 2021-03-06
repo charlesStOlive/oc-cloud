@@ -15,7 +15,7 @@ class CloudWord extends WordBehavior
         $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getPartialOptions($modelId, 'Waka\Worder\Models\Document');
+        $options = $ds->getProductorOptions('Waka\Worder\Models\Document', $modelId);
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
@@ -31,14 +31,12 @@ class CloudWord extends WordBehavior
         $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getPartialOptions($modelId, 'Waka\Worder\Models\Document');
+        $options = $ds->getProductorOptions('Waka\Worder\Models\Document', $modelId);
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return [
-            '#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_content.htm'),
-        ];
+        return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_content.htm')];
     }
     /**
      * Appel du conteneur popupLot pour lot
@@ -49,14 +47,12 @@ class CloudWord extends WordBehavior
         $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getPartialOptions($modelId, 'Waka\Worder\Models\Document');
+        $options = $ds->getProductorOptions('Waka\Worder\Models\Document', $modelId);
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return [
-            '#popupLotContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm'),
-        ];
+        return ['#popupLotContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm')];
     }
 
     /**
