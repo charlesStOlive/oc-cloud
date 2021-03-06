@@ -71,7 +71,7 @@ class CloudPdf extends PdfBehavior
         }
         $productorId = post('productorId');
         $modelId = post('modelId');
-        return PdfCreator::find($productorId)->renderCloud($modelId);
+        return PdfCreator::find($productorId)->setModelId($modelId)->renderCloud();
     }
 
     /**
@@ -79,5 +79,48 @@ class CloudPdf extends PdfBehavior
      */
     public function onCloudLotPdfValidation()
     {
+        $errors = $this->CheckIndexValidation(\Input::all());
+        if ($errors) {
+            throw new \ValidationException(['error' => $errors]);
+        }
+        $lotType = post('lotType');
+        $productorId = post('productorId');
+        $listIds = null;
+        if ($lotType == 'filtered') {
+            $listIds = Session::get('lot.listId');
+        } elseif ($lotType == 'checked') {
+            $listIds = Session::get('lot.checkedIds');
+        }
+        Session::forget('lot.listId');
+        Session::forget('lot.checkedIds');
+        //
+        $datas = [
+            'listIds' => $listIds,
+            'productorId' => $productorId,
+        ];
+        try {
+            $job = new \Waka\Mailer\Jobs\lotPdf($datas);
+            $jobManager = \App::make('Waka\Wakajob\Classes\JobManager');
+            $jobManager->dispatch($job, "waka.cloud::lang.cloudpdf.job_request");
+            $this->vars['jobId'] = $job->jobId;
+        } catch (Exception $ex) {
+                $this->controller->handleError($ex);
+        }
+        return ['#popupActionContent' => $this->makePartial('$/waka/wakajob/controllers/jobs/_confirm.htm')];
+    }
+
+    public function CheckIndexValidation($inputs)
+    {
+        $rules = [
+            'productorId' => 'required',
+        ];
+
+        $validator = \Validator::make($inputs, $rules);
+
+        if ($validator->fails()) {
+            return $validator->messages()->first();
+        } else {
+            return false;
+        }
     }
 }

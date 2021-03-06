@@ -27,9 +27,16 @@ return [
     'pdf' => [
         'popup_title' => "Créer un PDF sur le cloud",
         'popup_lot_title' => "Créer un lot de PDF dans le cloud",
+        'job_title' => "PDF à créer",
+        'job_create' => "PDF crée(s)",
+        'job_scoped' => "PDF bloqué par les restrictions",
+
     ],
     'word' => [
         'popup_title' => "Créer un Word sur le cloud",
         'popup_lot_title' => "Créer un lot de Word dans le cloud",
+        'job_title' => "Word à créer",
+        'job_create' => "Word crée(s)",
+        'job_scoped' => "Word bloqué(s) par les restrictions",
     ],
 ];

@@ -66,7 +66,7 @@ class CloudWord extends WordBehavior
         }
         $productorId = post('productorId');
         $modelId = post('modelId');
-        return WordCreator::find($productorId)->renderCloud($modelId);
+        return WordCreator::find($productorId)->setModelId($modelId)->renderCloud();
     }
 
     /**
