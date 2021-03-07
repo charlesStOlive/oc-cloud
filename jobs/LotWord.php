@@ -90,7 +90,7 @@ class LotWord implements WakajobQueueJob
          */
         $productorId = $this->data['productorId'];
         $wordCreator = WordCreator::find($productorId);
-        $modelDataSource = $mailCreator->getProductor()->data_source;
+        $modelDataSource = $wordCreator->getProductor()->data_source;
         $ds = new DataSource($modelDataSource);
         //
         $targets = $this->data['listIds'];
@@ -116,6 +116,7 @@ class LotWord implements WakajobQueueJob
                         $jobManager->failJob($this->jobId);
                         break;
                     }
+                    $jobManager->updateJobState($this->jobId, $loop);
                     /**
                      * DEBUT TRAITEMENT **************
                      */
@@ -133,14 +134,14 @@ class LotWord implements WakajobQueueJob
                      */
                 }
                 $loop += $this->chunk;
-                $jobManager->updateJobState($this->jobId, $loop);
             }
+            $jobManager->updateJobState($this->jobId, $loop);
             $jobManager->completeJob(
                 $this->jobId,
                 [
-                'Message' => \count($targets).' '. \Lang::get('waka.mailer::lang.word.job_title'),
-                'waka.cloud::lang.word.job_create' => $create,
-                'waka.mailer::lang.word.job_scoped' => $scopeError,
+                'Message' => \count($targets).' '. \Lang::get('waka.cloud::word.job_title'),
+                'waka.cloud::word.job_create' => $create,
+                'waka.mailer::word.job_scoped' => $scopeError,
                 ]
             );
         } catch (\Exception $ex) {

@@ -31,6 +31,7 @@ class FolderOrganisation
             $this->recursiveSearch($model);
             return array_reverse($this->folderArray);
         } else {
+            return null;
         }
     }
 

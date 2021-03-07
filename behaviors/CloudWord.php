@@ -3,6 +3,7 @@
 use Waka\Utils\Classes\DataSource;
 use Waka\Worder\Behaviors\WordBehavior;
 use Waka\Worder\Classes\WordCreator;
+use Session;
 
 class CloudWord extends WordBehavior
 {
@@ -52,7 +53,7 @@ class CloudWord extends WordBehavior
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return ['#popupLotContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm')];
+        return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm')];
     }
 
     /**
@@ -74,5 +75,48 @@ class CloudWord extends WordBehavior
      */
     public function onCloudLotWordValidation()
     {
+        $errors = $this->CheckIndexValidation(\Input::all());
+        if ($errors) {
+            throw new \ValidationException(['error' => $errors]);
+        }
+        $lotType = post('lotType');
+        $productorId = post('productorId');
+        $listIds = null;
+        if ($lotType == 'filtered') {
+            $listIds = Session::get('lot.listId');
+        } elseif ($lotType == 'checked') {
+            $listIds = Session::get('lot.checkedIds');
+        }
+        Session::forget('lot.listId');
+        Session::forget('lot.checkedIds');
+        //
+        $datas = [
+            'listIds' => $listIds,
+            'productorId' => $productorId,
+        ];
+        try {
+            $job = new \Waka\Cloud\Jobs\LotWord($datas);
+            $jobManager = \App::make('Waka\Wakajob\Classes\JobManager');
+            $jobManager->dispatch($job, "waka.cloud::lang.word.job_request");
+            $this->vars['jobId'] = $job->jobId;
+        } catch (Exception $ex) {
+                $this->controller->handleError($ex);
+        }
+        return ['#popupActionContent' => $this->makePartial('$/waka/wakajob/controllers/jobs/_confirm.htm')];
+    }
+
+    public function CheckIndexValidation($inputs)
+    {
+        $rules = [
+            'productorId' => 'required',
+        ];
+
+        $validator = \Validator::make($inputs, $rules);
+
+        if ($validator->fails()) {
+            return $validator->messages()->first();
+        } else {
+            return false;
+        }
     }
 }

@@ -1,25 +1,25 @@
 <?= Form::open() ?>
 <div class="report-widget">
     <h5><?=e(trans('waka.cloud::lang.pdf.popup_lot_title'))?></h5>
-    <div class="form-group">
-        <select class="form-control custom-select"
-                name="productorId">
-            <option value=""
-                    disabled
-                    selected><?=e(trans('waka.utils::lang.global.placeholder_model'))?></option>
-            <?php foreach($options as $key => $value)  { ?>
-            <option value="<?=$key?>">
-                <?=$value?>
-            </option>
-            <?php } ?>
-        </select>
+    <div class="modal-body">
+        <div class="form-group">
+            <select class="form-control custom-select"
+                    name="productorId">
+                <option value=""
+                        disabled
+                        selected><?=e(trans('waka.utils::lang.global.placeholder_model'))?></option>
+                <?php foreach($options as $key => $value)  { ?>
+                <option value="<?=$key?>"><?=$value?></option>
+                <?php } ?>
+            </select>
+        </div>
     </div>
+
     <button type="submit"
             data-request="onCloudLotPdfValidation"
-            data-request-data="modelId:'<?=$modelId?>'"
-            data-popup-load-indicator=true
             class="btn btn-primary">
         <?=e(trans('waka.utils::lang.global.validate'))?>
     </button>
 </div>
+
 <?= Form::close() ?>

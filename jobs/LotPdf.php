@@ -90,7 +90,7 @@ class LotPdf implements WakajobQueueJob
          */
         $productorId = $this->data['productorId'];
         $pdfCreator = PdfCreator::find($productorId);
-        $modelDataSource = $mailCreator->getProductor()->data_source;
+        $modelDataSource = $pdfCreator->getProductor()->data_source;
         $ds = new DataSource($modelDataSource);
         //
         $targets = $this->data['listIds'];
@@ -116,6 +116,7 @@ class LotPdf implements WakajobQueueJob
                         $jobManager->failJob($this->jobId);
                         break;
                     }
+                    $jobManager->updateJobState($this->jobId, $loop);
                     /**
                      * DEBUT TRAITEMENT **************
                      */
@@ -133,14 +134,14 @@ class LotPdf implements WakajobQueueJob
                      */
                 }
                 $loop += $this->chunk;
-                $jobManager->updateJobState($this->jobId, $loop);
             }
+            $jobManager->updateJobState($this->jobId, $loop);
             $jobManager->completeJob(
                 $this->jobId,
                 [
-                'Message' => \count($targets).' '. \Lang::get('waka.mailer::lang.pdf.job_title'),
+                'Message' => \count($targets).' '. \Lang::get('waka.cloud::lang.pdf.job_title'),
                 'waka.cloud::lang.pdf.job_create' => $create,
-                'waka.mailer::lang.pdf.job_scoped' => $scopeError,
+                'waka.cloud::lang.pdf.job_scoped' => $scopeError,
                 ]
             );
         } catch (\Exception $ex) {

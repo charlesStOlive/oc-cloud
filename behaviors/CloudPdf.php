@@ -3,6 +3,7 @@
 use Waka\Pdfer\Behaviors\PdfBehavior;
 use Waka\Pdfer\Classes\PdfCreator;
 use Waka\Utils\Classes\DataSource;
+use Session;
 
 class CloudPdf extends PdfBehavior
 {
@@ -35,9 +36,7 @@ class CloudPdf extends PdfBehavior
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return [
-            '#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_content.htm'),
-        ];
+        return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_content.htm')];
     }
     /**
      * Appel du conteneur popupLot pour lot
@@ -48,14 +47,11 @@ class CloudPdf extends PdfBehavior
         $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getProductorOptions('Waka\Pdfer\Models\WakaPdf', $modelId);
+        $options = $ds->getPartialIndexOptions('Waka\Pdfer\Models\WakaPdf');
+        trace_log("yo");
 
         $this->vars['options'] = $options;
-        $this->vars['modelId'] = $modelId;
-
-        return [
-            '#popupLotContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_lot.htm'),
-        ];
+        return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_lot.htm')];
     }
 
     /**
@@ -99,9 +95,9 @@ class CloudPdf extends PdfBehavior
             'productorId' => $productorId,
         ];
         try {
-            $job = new \Waka\Mailer\Jobs\lotPdf($datas);
+            $job = new \Waka\Cloud\Jobs\LotPdf($datas);
             $jobManager = \App::make('Waka\Wakajob\Classes\JobManager');
-            $jobManager->dispatch($job, "waka.cloud::lang.cloudpdf.job_request");
+            $jobManager->dispatch($job, "waka.cloud::lang.pdf.job_request");
             $this->vars['jobId'] = $job->jobId;
         } catch (Exception $ex) {
                 $this->controller->handleError($ex);
