@@ -48,7 +48,7 @@ class CloudPdf extends PdfBehavior
 
         $ds = new DataSource($modelClass, 'class');
         $options = $ds->getPartialIndexOptions('Waka\Pdfer\Models\WakaPdf');
-        trace_log("yo");
+        //trace_log("yo");
 
         $this->vars['options'] = $options;
         return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_lot.htm')];
