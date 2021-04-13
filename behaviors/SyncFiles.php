@@ -130,13 +130,9 @@ class SyncFiles extends ControllerBehavior
         $appFolder = $syncOpt['app_folder'];
 
         $cloudSystem = App::make('cloudSystem');
-        $cloudFolderDir = $cloudSystem->findOrCreateDir($cloudFolder);
-
-        $docs = $cloudSystem->listFolderItems($cloudFolder, '/', false);
+        $docs = $cloudSystem->listFolderItems($cloudFolder);
 
         $this->vars['docs'] = $docs;
-
-        //\Storage::cloud()->put($lastFolderDir['path'] . '/' . $filename, $fileData);
 
         return $this->makePartial('$/waka/cloud/behaviors/syncfiles/_popup.htm');
     }
@@ -179,12 +175,11 @@ class SyncFiles extends ControllerBehavior
         $modelClass = post('model');
         $model = $modelClass::find(post('modelId'));
         $modelPath = $model->path;
-        $array = explode('/', $modelPath);
-        $fileName = array_pop($array);
+        $path_parts = pathinfo($modelPath);
+        $fileName = $path_parts['basename'];
 
         $cloudSystem = App::make('cloudSystem');
-        $cloudFolderDir = $cloudSystem->findOrCreateDir($cloudFolder);
-        $rawData = $cloudSystem->getRawFile($fileName, $cloudFolderDir['path']);
+        $rawData = $cloudSystem->getRawFile($cloudFolder.'/'.$fileName);
         Storage::put('media/' . $appFolder . '/' . $fileName, $rawData);
         \Flash::success("Fichier synchronisé");
     }

@@ -19,7 +19,7 @@ class QueueCloud
         $appFolder = $syncOpt['app_folder'];
 
         foreach ($docToSync as $path => $docName) {
-            $rawData = Storage::cloud()->get($path);
+            $rawData = $cloudSystem->get($path);
             Storage::put('media/' . $appFolder . '/' . $docName, $rawData);
         }
 
@@ -98,12 +98,10 @@ class QueueCloud
         $fileData = file_get_contents($url);
 
         $folderOrg = new \Waka\Cloud\Classes\FolderOrganisation();
-        $folders = $folderOrg->getFolder($model);
+        $foldersPath = $folderOrg->getPath($model);
 
         $cloudSystem = App::make('cloudSystem');
-        $lastFolderDir = $cloudSystem->createDirFromArray($folders);
-
-        \Storage::cloud()->put($lastFolderDir['path'] . '/' . $filename, $fileData);
+        $cloudSystem->put($foldersPath . '/' . $filename, $fileData);
     }
 
     public function findCloud($cloudeables, $modelId, $productor)

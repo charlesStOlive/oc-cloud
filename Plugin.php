@@ -7,8 +7,7 @@ use Event;
 use System\Classes\PluginBase;
 use View;
 use Waka\Cloud\Listener\PluginEventSubscriber;
-use Waka\Worder\Controllers\Documents as DocumentController;
-use Waka\Worder\Models\Document as DocumentModel;
+
 
 /**
  * cloud Plugin Information File
@@ -75,39 +74,6 @@ class Plugin extends PluginBase
             // Implement behavior if not already implemented
             if (!$controller->isClassExtendedWith('Waka.cloud.Behaviors.SyncFiles')) {
                 $controller->implement[] = 'Waka.cloud.Behaviors.SyncFiles';
-            }
-        });
-
-        Event::listen('backend.form.extendFields', function ($widget) {
-            $templateFolder = Config::get('wcli.wconfig::cloud.word_folder');
-            if (!$templateFolder) {
-                return;
-            }
-            // Only for the User controller
-            if (!$widget->getController() instanceof DocumentController) {
-                //tracelog("erreur controller");
-                //tracelog(get_class($widget->getController()));
-                return;
-            }
-
-            // Only for the User model
-            if (!$widget->model instanceof DocumentModel) {
-                //tracelog("erreur model");
-                return;
-            }
-            if ($widget->isNested) {
-                return;
-            }
-
-            // This includes the fields from the parent form instead instead...
-
-            $path = $widget->getField('path');
-            if ($path) {
-                $path->type = 'dropdown';
-                $cloudSystem = App::make('cloudSystem');
-
-                $options = $cloudSystem->listFolderItems($templateFolder);
-                $path->options = $options->toArray();
             }
         });
 

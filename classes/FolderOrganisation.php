@@ -24,15 +24,16 @@ class FolderOrganisation
         $this->folderArray = [];
     }
 
-    public function getFolder($model, $lot = null)
+    public function getFolder($model)
     {
-        if (!$lot) {
             $this->folderArray = [];
             $this->recursiveSearch($model);
             return array_reverse($this->folderArray);
-        } else {
-            return null;
-        }
+    }
+    public function getPath($model) {
+        $folderArray = $this->getFolder($model);
+        return implode('/', $folderArray);
+
     }
 
     public function recursiveSearch($model)
