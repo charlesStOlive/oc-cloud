@@ -42,16 +42,16 @@ class Gd
     public function getRawFile($pathAndFIleName)
     {
         $pathFileObject = $this->convertPathToObject($pathAndFIleName);
-        trace_log($pathFileObject);
+        //trace_log($pathFileObject);
         $folderpath_array = $pathFileObject['path_array'] ?? '/';
         $lastFolderObj = $this->createFolderFromArray($folderpath_array);
         $lastFolderId = $lastFolderObj['path'] ?? '/';
-        trace_log($lastFolderId);
+        //trace_log($lastFolderId);
        
 
 
         $contents = collect(Storage::cloud()->listContents($lastFolderId, $recursive = true));
-        trace_log($contents);
+        //trace_log($contents);
 
         $file = $contents
             ->where('type', '=', 'file')
@@ -60,7 +60,7 @@ class Gd
             ->first(); // there can be duplicate file names!
 
         //return $file; // array with file info
-        trace_log($file['path']);
+        //trace_log($file['path']);
 
         return Storage::cloud()->get($file['path']);
     }
