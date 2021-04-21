@@ -20,7 +20,13 @@ class CloudPdf extends PdfBehavior
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_popup.htm');
+        if($options) {
+            return $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_popup.htm');
+        } else {
+            return $this->makePartial('$/waka/utils/views/_popup_no_model.htm');
+        }
+
+       
     }
     /**
      * Appel du conteneur popupIndex pour un cloud unique
@@ -36,7 +42,13 @@ class CloudPdf extends PdfBehavior
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_content.htm')];
+        if($options) {
+            return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_content.htm')];
+        } else {
+            return ['#popupActionContent' => $this->makePartial('$/waka/utils/views/_content_no_model.htm')];
+        }
+
+        
     }
     /**
      * Appel du conteneur popupLot pour lot
@@ -94,9 +106,9 @@ class CloudPdf extends PdfBehavior
             'listIds' => $listIds,
             'productorId' => $productorId,
         ];
+        $job = new \Waka\Cloud\Jobs\LotPdf($datas);
+        $jobManager = \App::make('Waka\Wakajob\Classes\JobManager');
         try {
-            $job = new \Waka\Cloud\Jobs\LotPdf($datas);
-            $jobManager = \App::make('Waka\Wakajob\Classes\JobManager');
             $jobManager->dispatch($job, "waka.cloud::lang.pdf.job_request");
             $this->vars['jobId'] = $job->jobId;
         } catch (Exception $ex) {

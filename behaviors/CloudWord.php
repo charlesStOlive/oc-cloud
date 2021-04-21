@@ -21,7 +21,13 @@ class CloudWord extends WordBehavior
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return $this->makePartial('$/waka/cloud/behaviors/cloudword/_popup.htm');
+        if($options) {
+            return $this->makePartial('$/waka/cloud/behaviors/cloudword/_popup.htm');
+        } else {
+            return $this->makePartial('$/waka/utils/views/_popup_no_model.htm');
+        }
+
+        
     }
     /**
      * Appel du conteneur popupIndex pour un cloud unique
@@ -53,7 +59,13 @@ class CloudWord extends WordBehavior
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
 
-        return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm')];
+        if($options) {
+            return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm')];
+        } else {
+            return ['#popupActionContent' => $this->makePartial('$/waka/utils/views/_content_no_model.htm')];
+        }
+
+        
     }
 
     /**
