@@ -3,7 +3,7 @@
 //use Storage;
 use ApplicationException;
 use Config;
-use October\Rain\Support\Collection;
+use Winter\Storm\Support\Collection;
 
 /**
  * Description of Gd
