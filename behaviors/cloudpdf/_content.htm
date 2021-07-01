@@ -2,7 +2,11 @@
 <div class="report-widget">
     <h5><?=e(trans('waka.cloud::lang.pdf.popup_title'))?></h5>
     <div class="form-group">
+        <input id="modelClass" name="modelClass" type="hidden" value="<?=$modelClass?>">
+        <input id="modelId" name="modelId" type="hidden" value="<?=$modelId?>">
         <select class="form-control custom-select"
+                data-request="onSelectWakaPdf"
+                data-request-loading="#wakaLoading"
                 name="productorId">
             <option value=""
                     disabled
@@ -14,10 +18,15 @@
             <?php } ?>
         </select>
     </div>
+    <div class="p-t-md">
+        <?= $this->makePartial('~/plugins/waka/utils/views/wakaLoading.htm') ?>
+        <div id="askDataWidget">
+            <!--Emplacement pour les data-->
+        </div>
+    </div>
     <button type="submit"
             data-request="onCloudPdfValidation"
-            data-request-data="modelId:'<?=$modelId?>'"
-            data-popup-load-indicator=true
+            data-request-loading="#wakaLoading"
             class="btn btn-primary">
         <?=e(trans('waka.utils::lang.global.validate'))?>
     </button>

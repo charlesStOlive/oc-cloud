@@ -20,6 +20,7 @@ class CloudWord extends WordBehavior
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
+        $this->vars['modelClass'] = $modelClass;
 
         if($options) {
             return $this->makePartial('$/waka/cloud/behaviors/cloudword/_popup.htm');
@@ -42,6 +43,7 @@ class CloudWord extends WordBehavior
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
+        $this->vars['modelClass'] = $modelClass;
 
         return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_content.htm')];
     }
@@ -73,13 +75,16 @@ class CloudWord extends WordBehavior
      */
     public function onCloudWordValidation()
     {
+        $datas = post();
         $errors = $this->CheckValidation(\Input::all());
         if ($errors) {
             throw new \ValidationException(['error' => $errors]);
         }
         $productorId = post('productorId');
         $modelId = post('modelId');
-        return WordCreator::find($productorId)->setModelId($modelId)->renderCloud();
+        $asks = $datas['asks_array'] ?? [];
+        
+        return WordCreator::find($productorId)->setModelId($modelId)->setAsksResponse($asks)->renderCloud();
     }
 
     /**

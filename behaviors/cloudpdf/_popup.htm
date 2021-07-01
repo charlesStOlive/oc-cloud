@@ -9,7 +9,11 @@
             <h4 class="modal-title"><?=e(trans('waka.cloud::lang.pdf.popup_title'))?></h4>
         </div>
         <div class="modal-body">
+            <input id="modelClass" name="modelClass" type="hidden" value="<?=$modelClass?>">
+            <input id="modelId" name="modelId" type="hidden" value="<?=$modelId?>">
             <select class="form-control custom-select"
+                    data-request="onSelectWakaPdf"
+                    data-request-loading="#wakaLoading"
                     name="productorId">
                 <option value=""
                         disabled
@@ -21,10 +25,15 @@
                 <?php } ?>
             </select>
         </div>
+        <div class="p-t-md">
+            <?= $this->makePartial('~/plugins/waka/utils/views/wakaLoading.htm') ?>
+            <div id="askDataWidget">
+                <!--Emplacement pour les data-->
+            </div>
+        </div>
         <div class="modal-footer m-t">
             <button type="submit"
                     data-request="onCloudWordValidation"
-                    data-request-data="modelId:'<?=$modelId?>'"
                     data-popup-load-indicator=true
                     class="btn btn-primary">
                 <?=e(trans('waka.utils::lang.global.create'))?>

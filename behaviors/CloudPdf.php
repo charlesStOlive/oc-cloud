@@ -19,6 +19,7 @@ class CloudPdf extends PdfBehavior
         $options = $ds->getProductorOptions('Waka\Pdfer\Models\WakaPdf', $modelId);
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
+        $this->vars['modelClass'] = $modelClass;
 
         if($options) {
             return $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_popup.htm');
@@ -41,6 +42,7 @@ class CloudPdf extends PdfBehavior
 
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
+        $this->vars['modelClass'] = $modelClass;
 
         if($options) {
             return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_content.htm')];
@@ -63,6 +65,7 @@ class CloudPdf extends PdfBehavior
         //trace_log("yo");
 
         $this->vars['options'] = $options;
+        $this->vars['modelClass'] = $modelClass;
         return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_lot.htm')];
     }
 
@@ -73,13 +76,15 @@ class CloudPdf extends PdfBehavior
     {
         //trace_log('onCloudPdfValidation');
         //trace_log(\Input::all());
+        $datas = post();
         $errors = $this->CheckValidation(\Input::all());
         if ($errors) {
             throw new \ValidationException(['error' => $errors]);
         }
         $productorId = post('productorId');
         $modelId = post('modelId');
-        return PdfCreator::find($productorId)->setModelId($modelId)->renderCloud();
+        $asks = $datas['asks_array'] ?? [];
+        return PdfCreator::find($productorId)->setModelId($modelId)->setAsksResponse($asks)->renderCloud();
     }
 
     /**
@@ -93,6 +98,8 @@ class CloudPdf extends PdfBehavior
         }
         $lotType = post('lotType');
         $productorId = post('productorId');
+
+        trace_log(post());
         $listIds = null;
         if ($lotType == 'filtered') {
             $listIds = Session::get('lot.listId');

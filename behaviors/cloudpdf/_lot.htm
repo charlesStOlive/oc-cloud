@@ -12,11 +12,13 @@
                 <option value="<?=$key?>"><?=$value?></option>
                 <?php } ?>
             </select>
+            <?= $this->makePartial('~/plugins/waka/utils/views/wakaLoading.htm') ?>
         </div>
     </div>
 
     <button type="submit"
             data-request="onCloudLotPdfValidation"
+            data-request-loading="#wakaLoading"
             class="btn btn-primary">
         <?=e(trans('waka.utils::lang.global.validate'))?>
     </button>
