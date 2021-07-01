@@ -99,7 +99,7 @@ class CloudPdf extends PdfBehavior
         $lotType = post('lotType');
         $productorId = post('productorId');
 
-        trace_log(post());
+        //trace_log(post());
         $listIds = null;
         if ($lotType == 'filtered') {
             $listIds = Session::get('lot.listId');
