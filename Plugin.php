@@ -30,7 +30,6 @@ class Plugin extends PluginBase
     }
 
     public $require = [
-        'Waka.Pdfer',
     ];
 
     /**
