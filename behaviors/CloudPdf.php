@@ -58,10 +58,9 @@ class CloudPdf extends PdfBehavior
     public function onLoadLotPdfBehaviorContentForm()
     {
         $modelClass = post('modelClass');
-        $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getPartialIndexOptions('Waka\Pdfer\Models\WakaPdf');
+        $options = $ds->getLotProductorOptions('Waka\Pdfer\Models\WakaPdf');
         //trace_log("yo");
 
         $this->vars['options'] = $options;

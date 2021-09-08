@@ -53,13 +53,12 @@ class CloudWord extends WordBehavior
     public function onLoadLotWordBehaviorContentForm()
     {
         $modelClass = post('modelClass');
-        $modelId = post('modelId');
 
         $ds = new DataSource($modelClass, 'class');
-        $options = $ds->getProductorOptions('Waka\Worder\Models\Document', $modelId);
+        $options = $ds->getLotProductorOptions('Waka\Worder\Models\Document');
 
         $this->vars['options'] = $options;
-        $this->vars['modelId'] = $modelId;
+        $this->vars['modelClass'] = $modelClass;
 
         if($options) {
             return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudword/_lot.htm')];

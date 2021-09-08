@@ -89,9 +89,7 @@ class LotWord implements WakajobQueueJob
          * travail preparatoire sur les donnes
          */
         $productorId = $this->data['productorId'];
-        $wordCreator = WordCreator::find($productorId);
-        $modelDataSource = $wordCreator->getProductor()->data_source;
-        $ds = new DataSource($modelDataSource);
+        
         //
         $targets = $this->data['listIds'];
         $lot = $data['lot'] ?? false;
@@ -120,7 +118,9 @@ class LotWord implements WakajobQueueJob
                     /**
                      * DEBUT TRAITEMENT **************
                      */
-                    
+                    $wordCreator = WordCreator::find($productorId);
+                    $modelDataSource = $wordCreator->getProductor()->data_source;
+                    $ds = new DataSource($modelDataSource);
                     $wordCreator->setModelId($targetId);
                     $scopeIsOk = $wordCreator->checkScopes();
                     if (!$scopeIsOk) {
