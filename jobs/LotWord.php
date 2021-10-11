@@ -120,7 +120,7 @@ class LotWord implements WakajobQueueJob
                      */
                     $wordCreator = WordCreator::find($productorId);
                     $modelDataSource = $wordCreator->getProductor()->data_source;
-                    $ds = new DataSource($modelDataSource);
+                    $ds = \DataSources::find($modelDataSource);
                     $wordCreator->setModelId($targetId);
                     $scopeIsOk = $wordCreator->checkScopes();
                     if (!$scopeIsOk) {

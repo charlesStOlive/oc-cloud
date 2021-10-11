@@ -91,7 +91,7 @@ class LotPdf implements WakajobQueueJob
         $productorId = $this->data['productorId'];
         $pdfCreator = PdfCreator::find($productorId);
         $modelDataSource = $pdfCreator->getProductor()->data_source;
-        $ds = new DataSource($modelDataSource);
+        $ds = \DataSources::find($modelDataSource);
         //
         $targets = $this->data['listIds'];
         $lot = $data['lot'] ?? false;

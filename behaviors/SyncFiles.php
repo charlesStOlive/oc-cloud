@@ -36,8 +36,8 @@ class SyncFiles extends ControllerBehavior
         Session::put('lotCloud.listId', $results->lists('id'));
         Session::put('lotCloud.checkedIds', $checkedIds);
 
-        $model = post('model');
-        $ds = new DataSource($model, 'class');
+        $modelClass = post('model');
+        $ds = \DataSources::findByClass($modelClass);
 
         $publications = $ds->publications;
         $options = $publications['types'] ?? [];
@@ -45,8 +45,8 @@ class SyncFiles extends ControllerBehavior
         //$options = $ds->getPartialIndexOptions('Waka\Mailer\Models\WakaMail');
 
         $this->vars['options'] = $options;
-        $this->vars['all'] = $model::count();
-        $this->vars['model'] = $model;
+        $this->vars['all'] = $modelClass::count();
+        $this->vars['model'] = $modelClass;
         $this->vars['filtered'] = $query->count();
         $this->vars['countCheck'] = $countCheck;
 
@@ -55,8 +55,8 @@ class SyncFiles extends ControllerBehavior
 
     public function onSelectCloudType()
     {
-        $model = post('model');
-        $ds = new DataSource($model, 'class');
+        $modelClass = post('model');
+        $ds = \DataSources::findByClass($modelClass);
         $class = post('classType');
         $options = $ds->getPartialIndexOptions($class);
 

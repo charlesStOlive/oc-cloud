@@ -48,7 +48,8 @@ class CloudList extends FormWidgetBase
 
     public function getDataSource()
     {
-        return new DataSource(get_class($this->model), 'class');
+        $modelClass = get_class($this->model);
+        return \DataSources::findByClass($modelClass);
     }
 
     // public function getDataSourceFromModel(String $model)

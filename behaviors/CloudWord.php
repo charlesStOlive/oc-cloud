@@ -15,7 +15,7 @@ class CloudWord extends WordBehavior
         $modelClass = post('modelClass');
         $modelId = post('modelId');
 
-        $ds = new DataSource($modelClass, 'class');
+        $ds = \DataSources::findByClass($modelClass);
         $options = $ds->getProductorOptions('Waka\Worder\Models\Document', $modelId);
 
         $this->vars['options'] = $options;
@@ -38,7 +38,7 @@ class CloudWord extends WordBehavior
         $modelClass = post('modelClass');
         $modelId = post('modelId');
 
-        $ds = new DataSource($modelClass, 'class');
+        $ds = \DataSources::findByClass($modelClass);
         $options = $ds->getProductorOptions('Waka\Worder\Models\Document', $modelId);
 
         $this->vars['options'] = $options;
@@ -54,7 +54,7 @@ class CloudWord extends WordBehavior
     {
         $modelClass = post('modelClass');
 
-        $ds = new DataSource($modelClass, 'class');
+        $ds = \DataSources::findByClass($modelClass);
         $options = $ds->getLotProductorOptions('Waka\Worder\Models\Document');
 
         $this->vars['options'] = $options;

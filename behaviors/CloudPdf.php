@@ -15,7 +15,7 @@ class CloudPdf extends PdfBehavior
         $modelClass = post('modelClass');
         $modelId = post('modelId');
 
-        $ds = new DataSource($modelClass, 'class');
+        $ds = \DataSources::findByClass($modelClass);
         $options = $ds->getProductorOptions('Waka\Pdfer\Models\WakaPdf', $modelId);
         $this->vars['options'] = $options;
         $this->vars['modelId'] = $modelId;
@@ -37,7 +37,7 @@ class CloudPdf extends PdfBehavior
         $modelClass = post('modelClass');
         $modelId = post('modelId');
 
-        $ds = new DataSource($modelClass, 'class');
+        $ds = \DataSources::findByClass($modelClass);
         $options = $ds->getProductorOptions('Waka\Pdfer\Models\WakaPdf', $modelId);
 
         $this->vars['options'] = $options;
@@ -59,7 +59,7 @@ class CloudPdf extends PdfBehavior
     {
         $modelClass = post('modelClass');
 
-        $ds = new DataSource($modelClass, 'class');
+        $ds = \DataSources::findByClass($modelClass);
         $options = $ds->getLotProductorOptions('Waka\Pdfer\Models\WakaPdf');
         //trace_log("yo");
 
