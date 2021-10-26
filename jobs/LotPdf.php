@@ -122,7 +122,7 @@ class LotPdf implements WakajobQueueJob
                      */
                     
                     $pdfCreator->setModelId($targetId);
-                    $scopeIsOk = $pdfCreator->checkScopes();
+                    $scopeIsOk = $pdfCreator->checkConditions();
                     if (!$scopeIsOk) {
                         $scopeError++;
                         continue;
