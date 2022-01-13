@@ -15,6 +15,12 @@ use Waka\Cloud\Listener\PluginEventSubscriber;
 class Plugin extends PluginBase
 {
     /**
+     * @var array Plugin dependencies
+     */
+    public $require = [
+        'Waka.Utils',
+    ];
+    /**
      * Returns information about this plugin.
      *
      * @return array
@@ -29,8 +35,6 @@ class Plugin extends PluginBase
         ];
     }
 
-    public $require = [
-    ];
 
     /**
      * Register method, called when the plugin is first registered.
