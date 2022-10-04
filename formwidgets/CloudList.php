@@ -67,7 +67,7 @@ class CloudList extends FormWidgetBase
             throw new \SystemException('Config wcli.wconfig::cloud.controller manquant');
         }
         $ds = $this->getDataSource();
-        $ds->instanciateModel($this->model->id);
+        $ds->instanciateQuery($this->model->id);
 
         $cloudeables = [];
 
