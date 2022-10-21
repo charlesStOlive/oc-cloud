@@ -39,8 +39,6 @@ class FolderOrganisation
     public function recursiveSearch($model)
     {
         //On retrouve la classe du modele et on cherche dans la config cloud de wconfig
-        //trace_log("recursiveSearch");
-        //trace_log($model->toArray());
         $modelClass = get_class($model);
         $actualFolder = $this->configFolder->where('model', $modelClass)->first();
         $actualFolderKey = $this->configFolder->where('model', $modelClass)->keys()->first();

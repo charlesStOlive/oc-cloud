@@ -31,6 +31,7 @@ return [
         'job_title' => "PDF à créer",
         'job_create' => "PDF crée(s)",
         'job_scoped' => "PDF bloqué par les restrictions",
+        'job_ids_errors' => "Liste des ID avec des erreurs",
 
     ],
     'word' => [
@@ -40,5 +41,6 @@ return [
         'job_title' => "Word à créer",
         'job_create' => "Word crée(s)",
         'job_scoped' => "Word bloqué(s) par les restrictions",
+        'job_ids_errors' => "Liste des ID avec des erreurs",
     ],
 ];

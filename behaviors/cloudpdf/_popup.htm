@@ -1,47 +1,34 @@
-<?= Form::open()?>
+<?= Form::open() ?>
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <button type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-hidden="true">&times;</button>
-            <h4 class="modal-title"><?=e(trans('waka.cloud::lang.pdf.popup_title'))?></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"><?= e(trans('waka.cloud::lang.pdf.popup_title')) ?></h4>
         </div>
         <div class="modal-body">
-            <input id="modelClass" name="modelClass" type="hidden" value="<?=$modelClass?>">
-            <input id="modelId" name="modelId" type="hidden" value="<?=$modelId?>">
-            <select class="form-control custom-select"
-                    data-request="onSelectWakaPdf"
-                    data-request-loading="#wakaLoading"
-                    name="productorId">
-                <option value=""
-                        disabled
-                        selected><?=e(trans('waka.utils::lang.global.placeholder_model'))?></option>
-                <?php foreach($options as $key => $value)  { ?>
-                <option value="<?=$key?>">
-                    <?=$value?>
-                </option>
-                <?php } ?>
-            </select>
-        </div>
-        <div class="p-t-md">
-            <?= $this->makePartial('~/plugins/waka/utils/views/wakaLoading.htm') ?>
-            <div id="askDataWidget">
-                <!--Emplacement pour les data-->
+            <input id="modelClass" name="modelClass" type="hidden" value="<?= $modelClass ?>">
+            <input id="modelId" name="modelId" type="hidden" value="<?= $modelId ?>">
+            <div class="form-group">
+                <select class="form-control custom-select" data-request="onSelectCloudWakaPdf" data-request-loading="#wakaLoading" name="productorId">
+                    <option value="" disabled selected><?= e(trans('waka.utils::lang.global.placeholder_model')) ?></option>
+                    <?php foreach ($options as $key => $value) : ?>
+                        <option value="<?= $key ?>"><?= $value ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="">
+                <div id="askDataWidget">
+                    <!--Emplacement pour les data-->
+                </div>
             </div>
         </div>
         <div class="modal-footer m-t">
-            <button type="submit"
-                    data-request="onCloudWordValidation"
-                    data-popup-load-indicator=true
-                    class="btn btn-primary">
-                <?=e(trans('waka.utils::lang.global.create'))?>
+            <?= $this->makePartial('~/plugins/waka/utils/views/wakaLoading.htm') ?>
+            <button type="submit" data-request="onCloudWordValidation" data-popup-load-indicator=true class="btn btn-primary">
+                <?= e(trans('waka.utils::lang.global.create')) ?>
             </button>
-            <button type="button"
-                    class="btn btn-default"
-                    data-dismiss="popup">
-                <?=e(trans('waka.utils::lang.global.termined'))?>
+            <button type="button" class="btn btn-default" data-dismiss="popup">
+                <?= e(trans('waka.utils::lang.global.termined')) ?>
             </button>
         </div>
     </div>

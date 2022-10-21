@@ -1,34 +1,24 @@
 <?= Form::open() ?>
-<div class="report-widget">
-    <h5><?=e(trans('waka.cloud::lang.word.popup_title'))?></h5>
+<div>
+    <h5><?= e(trans('waka.cloud::lang.word.popup_title')) ?></h5>
     <div class="form-group">
-        <input id="modelClass" name="modelClass" type="hidden" value="<?=$modelClass?>">
-        <input id="modelId" name="modelId" type="hidden" value="<?=$modelId?>">
-        <select class="form-control custom-select"
-                data-request-loading="#wakaLoading"
-                data-request="onSelectWord"
-                name="productorId">
-            <option value=""
-                    disabled
-                    selected><?=e(trans('waka.utils::lang.global.placeholder_model'))?></option>
-            <?php foreach($options as $key => $value)  { ?>
-            <option value="<?=$key?>">
-                <?=$value?>
-            </option>
-            <?php } ?>
+        <input id="modelClass" name="modelClass" type="hidden" value="<?= $modelClass ?>">
+        <input id="modelId" name="modelId" type="hidden" value="<?= $modelId ?>">
+        <select class="form-control custom-select" data-request="onLotSelectDocument" data-request-loading="#wakaLoading" name="productorId">
+            <option value="" disabled selected><?= e(trans('waka.utils::lang.global.placeholder_model')) ?></option>
+            <?php foreach ($options as $key => $value) : ?>
+                <option value="<?= $key ?>"><?= $value ?></option>
+            <?php endforeach ?>
         </select>
-        <div class="p-t-md">
-            <?= $this->makePartial('~/plugins/waka/utils/views/wakaLoading.htm') ?>
-            <div id="askDataWidget">
-                <!--Emplacement pour les data-->
-            </div>
-        </div>
     </div>
-    <button type="submit"
-            data-request="onCloudWordValidation"
-            data-request-loading="#wakaLoading"
-            class="btn btn-primary">
-        <?=e(trans('waka.utils::lang.global.validate'))?>
-    </button>
+    <div id="askDataWidget">
+        <!--Emplacement pour les data-->
+    </div>
+    <?= $this->makePartial('~/plugins/waka/utils/views/wakaLoading.htm') ?>
+    <div style="text-align: right;">
+        <button type="submit" data-request="onCloudWordValidation" data-request-loading="#wakaLoading" class="btn btn-primary">
+            <?= e(trans('waka.utils::lang.global.validate')) ?>
+        </button>
+    </div>
 </div>
 <?= Form::close() ?>

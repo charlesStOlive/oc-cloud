@@ -68,6 +68,25 @@ class CloudPdf extends PdfBehavior
         return ['#popupActionContent' => $this->makePartial('$/waka/cloud/behaviors/cloudpdf/_lot.htm')];
     }
 
+
+
+
+    public function onSelectCloudWakaPdf() {
+        $productorId = post('productorId');
+        $modelId = post('modelId');
+        $productor = PdfCreator::find($productorId);
+        $askDataWidget = $this->createAskDataWidget();
+        $asks = $productor->getProductorAsks();
+        $askDataWidget->addFields($asks);
+        $this->vars['askDataWidget'] = $askDataWidget;
+        return [
+            '#askDataWidget' => $this->makePartial('$/waka/utils/models/ask/_widget_ask_data.htm'),
+        ];
+
+
+        
+    }
+
     /**
      * Validation cloud unique
      */
@@ -108,10 +127,16 @@ class CloudPdf extends PdfBehavior
         Session::forget('lot.listId');
         Session::forget('lot.checkedIds');
         //
+        $askResponse = post('asks_array');
+        $lot_folder = post("lot_folder");
+        //
         $datas = [
             'listIds' => $listIds,
             'productorId' => $productorId,
+            'askResponse' => $askResponse,
+            'lot_folder' => $lot_folder,
         ];
+        
         $job = new \Waka\Cloud\Jobs\LotPdf($datas);
         $jobManager = \App::make('Waka\Wakajob\Classes\JobManager');
         try {

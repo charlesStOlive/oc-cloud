@@ -69,6 +69,23 @@ class CloudWord extends WordBehavior
         
     }
 
+    public function onLotSelectDocument() {
+        $productorId = post('productorId');
+        $modelId = post('modelId');
+        $productor = WordCreator::find($productorId);
+
+        $askDataWidget = $this->createAskDataWidget();
+        $asks = $productor->getProductorAsks();
+        $askDataWidget->addFields($asks);
+        $this->vars['askDataWidget'] = $askDataWidget;
+        return [
+            '#askDataWidget' => $this->makePartial('$/waka/utils/models/ask/_widget_ask_data.htm'),
+        ];
+
+
+        
+    }
+
     /**
      * Validation cloud unique
      */
@@ -85,6 +102,8 @@ class CloudWord extends WordBehavior
         
         return WordCreator::find($productorId)->setModelId($modelId)->setAsksResponse($asks)->renderCloud();
     }
+
+
 
     /**
      * Validation cloud multiple
@@ -106,9 +125,14 @@ class CloudWord extends WordBehavior
         Session::forget('lot.listId');
         Session::forget('lot.checkedIds');
         //
+        $askResponse = post('asks_array');
+        $lot_folder = post("lot_folder");
+        //
         $datas = [
             'listIds' => $listIds,
             'productorId' => $productorId,
+            'askResponse' => $askResponse,
+            'lot_folder' => $lot_folder,
         ];
         try {
             $job = new \Waka\Cloud\Jobs\LotWord($datas);

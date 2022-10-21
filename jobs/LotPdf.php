@@ -89,12 +89,10 @@ class LotPdf implements WakajobQueueJob
          * travail preparatoire sur les donnes
          */
         $productorId = $this->data['productorId'];
-        $pdfCreator = PdfCreator::find($productorId);
-        $modelDataSource = $pdfCreator->getProductor()->data_source;
-        $ds = \DataSources::find($modelDataSource);
         //
         $targets = $this->data['listIds'];
-        $lot = $data['lot'] ?? false;
+        $lot = $this->data['lot_folder'] ?? false;
+        trace_log("lot folder : ".$lot);
         /**
          * We initialize database job. It has been assigned ID on dispatching,
          * so we pass it together with number of all elements to proceed (max_progress)
@@ -103,6 +101,7 @@ class LotPdf implements WakajobQueueJob
         $jobManager->startJob($this->jobId, \count($targets));
         $create = 0;
         $scopeError = 0;
+        $idsError = [];
         // Fin inistialisation
 
         //Travail sur les données
@@ -120,6 +119,8 @@ class LotPdf implements WakajobQueueJob
                     /**
                      * DEBUT TRAITEMENT **************
                      */
+                    $pdfCreator = PdfCreator::find($productorId);
+                    $modelDataSource = $pdfCreator->getProductor()->data_source;
                     
                     $pdfCreator->setModelId($targetId);
                     $scopeIsOk = $pdfCreator->checkConditions();
@@ -127,8 +128,14 @@ class LotPdf implements WakajobQueueJob
                         $scopeError++;
                         continue;
                     }
-                    $pdfCreator->renderCloud($lot);
-                    ++$create;
+                    try {
+                        $pdfCreator->renderCloud($lot);
+                        ++$create;
+                    }  catch(\Exception $ex) {
+                        array_push($idsError, $targetId);
+                        continue;
+
+                    }
                     /**
                      * FIN TRAITEMENT **************
                      */
@@ -142,6 +149,7 @@ class LotPdf implements WakajobQueueJob
                 'Message' => \count($targets).' '. \Lang::get('waka.cloud::lang.pdf.job_title'),
                 'waka.cloud::lang.pdf.job_create' => $create,
                 'waka.cloud::lang.pdf.job_scoped' => $scopeError,
+                'waka.cloud::lang.pdf.job_ids_errors' => implode(',',$idsError),
                 ]
             );
         } catch (\Exception $ex) {

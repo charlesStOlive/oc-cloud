@@ -92,7 +92,7 @@ class LotWord implements WakajobQueueJob
         
         //
         $targets = $this->data['listIds'];
-        $lot = $data['lot'] ?? false;
+        $lot = $this->data['lot_folder'] ?? false;
         /**
          * We initialize database job. It has been assigned ID on dispatching,
          * so we pass it together with number of all elements to proceed (max_progress)
@@ -101,6 +101,7 @@ class LotWord implements WakajobQueueJob
         $jobManager->startJob($this->jobId, \count($targets));
         $create = 0;
         $scopeError = 0;
+        $idsError = [];
         // Fin inistialisation
 
         //Travail sur les données
@@ -118,17 +119,22 @@ class LotWord implements WakajobQueueJob
                     /**
                      * DEBUT TRAITEMENT **************
                      */
-                    $wordCreator = WordCreator::find($productorId);
-                    $modelDataSource = $wordCreator->getProductor()->data_source;
-                    $ds = \DataSources::find($modelDataSource);
+                    $wordCreator = WordCreator::find($productorId)->setAsksResponse($this->data['askResponse']);
                     $wordCreator->setModelId($targetId);
                     $scopeIsOk = $wordCreator->checkConditions();
                     if (!$scopeIsOk) {
                         $scopeError++;
                         continue;
                     }
-                    $wordCreator->renderCloud($lot);
-                    ++$create;
+                     try {
+                        $wordCreator->renderCloud($lot);
+                        ++$create;
+                    }  catch(\Exception $ex) {
+                        \Log::error($ex);
+                        array_push($idsError, $targetId);
+                        continue;
+
+                    }
                     /**
                      * FIN TRAITEMENT **************
                      */
@@ -142,6 +148,7 @@ class LotWord implements WakajobQueueJob
                 'Message' => \count($targets).' '. \Lang::get('waka.cloud::word.job_title'),
                 'waka.cloud::word.job_create' => $create,
                 'waka.mailer::word.job_scoped' => $scopeError,
+                'waka.cloud::lang.word.job_ids_error' => implode(',',$idsError),
                 ]
             );
         } catch (\Exception $ex) {
