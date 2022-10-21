@@ -92,7 +92,6 @@ class LotPdf implements WakajobQueueJob
         //
         $targets = $this->data['listIds'];
         $lot = $this->data['lot_folder'] ?? false;
-        trace_log("lot folder : ".$lot);
         /**
          * We initialize database job. It has been assigned ID on dispatching,
          * so we pass it together with number of all elements to proceed (max_progress)
